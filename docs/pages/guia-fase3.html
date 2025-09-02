@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumidor | Marketo</title>
+    
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* --- 1. CSS Variables and Global Styles --- */
+        html, body { scrollbar-width: none; -ms-overflow-style: none; overflow: -moz-scrollbars-none; }
+        html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+        :root {
+            --bg-color: #121212; --primary-surface-color: #1E1E1E; --accent-color: #F57C00;
+            --accent-hover-color: #FB8C00; --text-color: #c7c7c7; --heading-color: #ffffff;
+            --border-color: #333333; --navbar-height: 70px;
+        }
+        body.light-mode {
+            --bg-color: #f8f9fa; --primary-surface-color: #ffffff; --text-color: #333;
+            --heading-color: #2c3e50; --border-color: #e0e0e0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Lato', sans-serif; font-size: 16px; line-height: 1.6; color: var(--text-color); background-color: var(--bg-color); transition: background-color 0.3s ease, color 0.3s ease; }
+        h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--heading-color); line-height: 1.2; }
+        a { text-decoration: none; color: var(--accent-color); transition: color 0.3s ease; }
+        a:hover { color: var(--accent-hover-color); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 80px 0; }
+        
+        /* --- 2. Navigation Bar --- */
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; height: var(--navbar-height); background-color: var(--primary-surface-color); z-index: 1000; transition: box-shadow 0.3s ease, background-color 0.3s ease; border-bottom: 1px solid var(--border-color); }
+        .navbar-scrolled { background-color: rgba(30, 30, 30, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3); }
+        body.light-mode .navbar-scrolled { background-color: rgba(255, 255, 255, 0.85); }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; height: 100%; }
+        .navbar-logo { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--heading-color); }
+        .navbar-logo i { color: var(--accent-color); margin-right: 8px; }
+        .nav-menu { display: flex; align-items: center; gap: 30px; }
+        .nav-links { display: flex; list-style: none; gap: 40px; }
+        .nav-links a { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; color: var(--text-color); position: relative; padding-bottom: 5px; }
+        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background-color: var(--accent-color); transition: width 0.3s ease; }
+        .nav-links > li > a:hover { color: var(--heading-color); }
+        .nav-links > li > a:hover::after { width: 100%; }
+        .nav-links a.active { color: var(--accent-color); }
+        .nav-links > li > a.active::after { width: 100%; }
+        .dropdown { position: relative; }
+        .dropdown-menu { display: none; position: absolute; top: 110%; left: 50%; transform: translateX(-50%); background-color: var(--primary-surface-color); list-style: none; padding: 10px 0; margin: 0; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); min-width: 220px; z-index: 1001; border: 1px solid var(--border-color); }
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu li a { display: block; padding: 12px 20px; color: var(--text-color); font-size: 0.95rem; transition: background-color 0.2s ease, color 0.2s ease; }
+        .dropdown-menu li a:hover { color: var(--heading-color); background-color: var(--border-color); }
+        .dropdown-menu li a::after { content: none; }
+        .dropdown-menu li a.active { color: var(--accent-color); font-weight: 700; }
+        .dropdown > a i { margin-left: 8px; font-size: 0.8em; transition: transform 0.3s ease; }
+        .dropdown:hover > a i { transform: rotate(180deg); }
+        .dropdown > a.noclick { cursor: default; }
+        .dropdown > a.noclick:hover::after { width: 0; }
+        #theme-toggle { background: none; border: none; color: var(--accent-color); font-size: 1.4rem; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; }
+        #theme-toggle .fa-sun { display: none; }
+        body.light-mode #theme-toggle .fa-sun { display: block; }
+        body.light-mode #theme-toggle .fa-moon { display: none; }
+        .hamburger-menu { display: none; }
+        
+        /* --- 3. Page Content Styles --- */
+        main { padding-top: var(--navbar-height); }
+        .footer { background-color: var(--primary-surface-color); color: var(--text-color); text-align: center; padding: 40px 0; border-top: 1px solid var(--border-color); }
+        
+        /* --- MODIFIED: Page Header with Background Image --- */
+        .page-header {
+            text-align: center;
+            padding: 100px 0; /* Increased padding */
+            border-bottom: 1px solid var(--border-color);
+            position: relative; /* Needed for the overlay */
+            background-image: url('../images/turistas.jpg'); /* New cosmetic-themed image */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Parallax effect */
+            overflow: hidden;
+        }
+        /* --- NEW: Header Overlay for Readability --- */
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(18, 18, 18, 0.75); /* Dark overlay */
+            z-index: 1;
+            transition: background-color 0.3s ease;
+        }
+        body.light-mode .page-header::before {
+            background-color: rgba(255, 255, 255, 0.8); /* Light overlay */
+        }
+        /* --- NEW: Ensure Header Text is Above Overlay --- */
+        .page-header h1, .page-header p {
+            position: relative;
+            z-index: 2; /* Sits on top of the overlay */
+        }
+        .page-header h1 { font-size: 3rem; margin-bottom: 10px; }
+        .page-header p { font-size: 1.2rem; max-width: 700px; margin: 0 auto; color: var(--text-color); }
+        
+        /* Main content layout for side nav */
+        .content-wrapper {
+            display: flex;
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .main-article {
+            flex: 1;
+            min-width: 0;
+        }
+        .content-section { padding-top: 60px; padding-bottom: 0;}
+        .content-section .container { max-width: 800px; padding: 0; margin: 0;} /* Reset container */
+        
+        .content-section p { margin-bottom: 1.5em; font-size: 1.1rem; line-height: 1.7; }
+        .content-section h3 { font-size: 1.8rem; margin-top: 2em; margin-bottom: 1em; border-left: 4px solid var(--accent-color); padding-left: 15px; }
+        .content-section h3:first-of-type { margin-top: 0; }
+        .content-image { height: auto; border-radius: 8px; margin: 30px 0; border: 1px solid var(--border-color); display: block;}
+        .image-float-right { float: right; width: 60%; max-width: 600px; margin: 10px 0 15px 25px; }
+        .image-float-left { float: left; width: 80%; max-width: 550px; margin: 10px 25px 15px 0; }
+        .chart-container { position: relative; height: 600px; width: 100%; margin: 60px 0; }
+        .chart-caption { text-align: center; font-size: 0.9rem; font-style: italic; color: var(--text-color); opacity: 0.85; margin-top: 15px; }
+        
+        /* --- 4. Side Navigation --- */
+        .side-nav {
+            flex: 0 0 220px;
+            align-self: flex-start;
+            position: sticky;
+            top: calc(var(--navbar-height) + 40px);
+            padding-top: 60px;
+            height: calc(100vh - var(--navbar-height));
+            overflow-y: auto;
+        }
+        .side-nav-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .side-nav ul {
+            list-style: none;
+        }
+        .side-nav li a {
+            display: block;
+            padding: 8px 15px;
+            margin-bottom: 5px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease-in-out;
+        }
+        .side-nav li a:hover {
+            background-color: var(--primary-surface-color);
+            color: var(--heading-color);
+        }
+        .side-nav li a.active {
+            color: var(--accent-color);
+            font-weight: 700;
+            background-color: var(--primary-surface-color);
+            border-left-color: var(--accent-color);
+        }
+        /* --- 5. Mobile Responsiveness --- */
+        @media (max-width: 992px) { /* Widened breakpoint for side-nav */
+             .side-nav { display: none; }
+             .content-wrapper { display: block; }
+             .content-section .container { max-width: 800px; margin: 0 auto; padding: 0 20px;}
+        }
+        @media (max-width: 768px) {
+            section { padding: 60px 0; }
+            .page-header { padding: 80px 0; background-attachment: scroll; } /* Adjusted padding and fixed attachment */
+            .page-header h1 { font-size: 2.2rem; }
+            .content-section { padding-top: 40px; }
+            .content-section .image-float-right, .content-section .image-float-left { float: none; width: 100%; max-width: 100%; margin: 20px auto; }
+            .chart-container { height: 500px; } /* Reduce chart height on mobile */
+            /* --- Navbar Fixes --- */
+            .navbar .container { justify-content: space-between; }
+            .hamburger-menu { display: block; font-size: 1.5rem; color: var(--heading-color); background: transparent; border: none; cursor: pointer; z-index: 1002; }
+            .nav-menu {
+                position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
+                background-color: var(--primary-surface-color);
+                flex-direction: column; justify-content: center; align-items: center;
+                gap: 40px; transition: right 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+                box-shadow: -5px 0 15px rgba(0,0,0,0.2); padding: 20px;
+            }
+            .nav-menu.active { right: 0; }
+            .nav-links { flex-direction: column; gap: 25px; width: 100%; text-align: center; margin-top: 40px; }
+            .dropdown:hover .dropdown-menu { display: none; }
+            
+            /* --- Mobile Dropdown/Accordion Styles --- */
+            .dropdown > a { display: flex; justify-content: center; align-items: center; gap: 8px; }
+            .dropdown > a i { display: inline-block; transition: transform 0.3s ease; }
+            .dropdown.open > a i { transform: rotate(180deg); }
+            .dropdown .dropdown-menu {
+                display: none; position: static; transform: none; box-shadow: none; border: none;
+                background-color: rgba(0,0,0,0.15); min-width: unset;
+                padding: 10px 0; margin-top: 15px; border-radius: 8px;
+            }
+            body.light-mode .dropdown .dropdown-menu { background-color: rgba(0,0,0,0.05); }
+            .dropdown.open .dropdown-menu { display: block; }
+            .dropdown-menu li a { padding: 10px 20px; font-size: 0.9rem; }
+            #theme-toggle { position: absolute; bottom: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+      <div class="container">
+        <a class="navbar-logo" href="../index.html"
+          ><i class="fa-solid fa-chart-simple"></i>Mar<span style="color: var(--accent-color)">k</span>eto!</a
+        ><button aria-label="Toggle menu" class="hamburger-menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <nav class="nav-menu">
+          <ul class="nav-links">
+            <li><a class="active" href="../index.html">Inicio</a></li>
+            <li class="dropdown">
+              <a class="noclick" href="#"
+                >Guía <i class="fa-solid fa-caret-down"></i
+              ></a>
+              <ul class="dropdown-menu">
+                <li><a href="guia-fase2.html">Análisis del mercado</a></li>
+                <li>
+                  <a href="guia-fase3.html">Comportamiento del consumidor</a>
+                </li>
+                <li><a href="guia-fase4.html">Variables de decisión</a></li>
+              </ul>
+            </li>
+            <li><a href="guia-fase5.html">Dinámica de juego</a></li>
+            <li><a href="decisiones.html">Decisiones y resultados</a></li>
+            <li><a href="contact.html">Soporte</a></li>
+          </ul>
+          <button id="theme-toggle" title="Toggle theme">
+            <i class="fa-solid fa-moon"></i><i class="fa-solid fa-sun"></i>
+          </button>
+        </nav>
+      </div>
+    </header>
+    <main>
+        <section class="page-header">
+            <h1>Comportamiento del consumidor</h1>
+            <p>Tendencias y actitudes hacia le consumo de protectores solares</p>
+        </section>
+        <!-- NEW: Content Wrapper for Flexbox Layout -->
+        <div class="content-wrapper">
+            
+            <!-- NEW: Side Navigation Menu -->
+            <nav class="side-nav">
+                <p class="side-nav-title">En esta página</p>
+                <ul>
+                    <li><a href="#cosmetica-actual">La cosmética actual</a></li>
+                    <li><a href="#actitudes-proteccion">Actitudes hacia la protección</a></li>
+                    <li><a href="#segmentacion">Tipos de consumidores</a></li>
+                </ul>
+            </nav>
+            <!-- NEW: Main Article Content Wrapper -->
+            <div class="main-article">
+                <section class="content-section">
+                    <div class="container">
+                        <!-- ADDED ID -->
+                        <h3 id="cosmetica-actual">La cosmética para el consumidor actual</h3>
+                        <p>El mercado de la cosmética en general, y el de los productos de cuidado de la piel en particular, han ido adquiriendo cada vez más importancia para el consumidor europeo. Los últimos estudios muestran que el 71% de los consumidores europeos consideran que la cosmética es una parte muy importante de su calidad de vida, y el 80% consideran que los productos cosméticos tienen un efecto muy positivo sobre el modo en que se sienten y su autoestima personal (Cosmetics Europe: The Personal Care Association, 2023).</p>
+                        <p>Además, consideran que juegan un papel importante en todo tipo de interacciones sociales. Concretamente, los consumidores europeos consideran que los productos de esta categoría contribuyen a un mejor estado de salud general, a mejorar las relaciones laborales y cualquier otro tipo de relación social, así como a la mejora de la autoconfianza. A diferencia de lo que pueda parecer, las diferencias entre hombres y mujeres son mínimas con respecto a la importancia de la cosmética, y solamente aparecen diferencias significativas en lo que se refiere a los productos relacionados con el maquillaje.</p>
+                        <div class="chart-container">
+                            <canvas id="myBarChart"></canvas>
+                        </div>
+                        <p class="chart-caption">Porcentaje de consumidores (%)</p>
+                        <p>Del mismo modo, tampoco hay diferencias importantes en relación con la edad del consumidor, y tanto los más jóvenes (de 16 a 24 años), como los más mayores (más de 65 años), presentan diferencias pequeñas con respecto a la importancia que tiene la cosmética en sus vidas.</p>
+                        <p>La estructura del mercado cosmético se divide en productos relacionados con el sol, cuidado de la piel, cuidado capilar, perfumes, cuidado corporal, maquillaje y productos de cuidado dental. Cabe mencionar que, especialmente en el sur de Europa, los productos relacionados con la exposición solar se equiparan al resto de los productos de cosmética, mientras que en otras zonas de Europa se les considera relativamente alejados de lo que consideran productos puramente cosméticos. Igualmente, para los países del sur de Europa la cosmética tiene una importancia mayor que para el resto de los países europeos. La gran mayoría de los consumidores (86%) consideran que la industria cosmética presenta un grado de innovación muy elevado, y que los productos que se lanzan al mercado son eficaces y de una calidad muy alta. Entre los factores que más valoran los consumidores europeos se encuentran las siguientes: eficacia del producto, su calidad, el grado de novedad, el precio, la apariencia del producto, y las iniciativas de responsabilidad social corporativa de las empresas fabricantes (ver Figura 1).</p>
+                        <img src="../images/influencer.jpg" alt="Influencer showing cosmetic products" class="content-image image-float-right">
+                        <p>Desafortunadamente, los estudios disponibles no aclaran qué es lo que entiende el consumidor por “producto de calidad”, ni establece orientaciones concretas con respecto a lo que se considera innovador, o al precio que el consumidor estaría dispuesto a pagar por este tipo de productos. Sí se dispone, sin embargo, del gasto per-cápita de los consumidores europeos, que se sitúa entre los 225€ al año de países como Noruega, y los 58€ al año de Bulgaria. El gasto per-cápita de España en productos de cosmética se sitúa actualmente en los 150€ al año, algo superior a la media europea, que asciende a los 137€ anuales. Estas cifras hay que interpretarlas con cautela, ya que hay diferencias muy importantes en función del género y de la edad. Por ejemplo, las mujeres europeas de 60 años gastan el triple que las mujeres de 25 años o menos (Euromonitor, 2023).</p>
+                        <p>Las fuentes de información que utilizan los consumidores para informarse sobre las propiedades de los productos cosméticos, o las novedades del mercado, son muy variadas. Según la mayoría de los estudios consultados, el “packaging” del producto y las páginas web de los fabricantes suelen ser la principal fuente de información (>50% de los casos cada una de ellas), aunque hay muchas otras fuentes utilizadas por los consumidores como la propia publicidad de las marcas, los blogs especializados, los amigos o la familia, las redes sociales, los profesionales de la estética, etc. No obstante, el auge de las redes sociales ha hecho que muchos estudios desglosen este apartado para entender mejor el proceso de compra de los usuarios. Aunque estos datos pueden cambiar con cierta rapidez, las fuentes online más consultadas, ordenadas por importancia, son las siguientes: las puntuaciones online de sitios como Amazon, etc., Facebook, YouTube, blogs especializados, Instagram y Twitter.</p>
+                        
+                        <!-- ADDED ID -->
+                        <h3 id="actitudes-proteccion">Actitudes hacia la protección solar</h3>
+                        <p>Los productos que se comercializan en este mercado se diferencian, fundamentalmente, por su factor de protección, y por propiedades adicionales que han ido surgiendo para poder aumentar el atractivo de la oferta (vitaminas para la piel, ingredientes respetuosos con el medio ambiente, etc.). Sin embargo, en los últimos años la marca del distribuidor ha cobrado fuerza, y los consumidores están siendo cada vez más sensibles al precio. Por otra parte, alternativas orgánicas fabricadas a partir de productos naturales se están convirtiendo poco a poco en una alternativa seria. Sin embargo, este tipo de productos aún tienen precios altos, fuera del rango aceptable para muchos consumidores habituales de esta categoría. Además, la ausencia de productos químicos hace que no sean tan efectivos como los protectores tradicionales. Estudios recientes (Euromonitor, 2023) muestran resultados similares, aunque algo más completos. No obstante, hay que tener en cuenta que estos estudios son siempre autoevaluativos, basados en la propia interpretación que hace el usuario de sus preferencias de consumo, y que no siempre coinciden con las motivaciones no conscientes de compra.</p>
+                        <img src="../images/sport.jpg" alt="Person running outdoors" class="content-image image-float-left">
+                        <p>Por otra parte, la tipología de consumidores no ha sufrido alteraciones importantes en los últimos años, y siguen apareciendo diferencias relativas al género y la edad. Los hombres se preocupan más por los aspectos funcionales del producto, mientras que las mujeres prefieren alternativas que ofrezcan beneficios adicionales y dan más importancia a la reputación de la marca. Por otra parte, los jóvenes son menos conscientes de los peligros que conlleva la exposición prolongada a los rayos ultravioleta, mientras que los adultos son usuarios convencidos de la necesidad de este tipo de productos. El comportamiento de compra, además, está condicionado por la existencia de niños en el hogar. En estos casos, los padres priorizan la protección de la piel del niño por encima de cualquier otro tipo de consideraciones. Los niños apenas muestra su preferencia por un producto u otro, y tampoco influye de forma determinante en la decisión de compra de sus padres. En cualquier caso, es un colectivo a tener en cuenta por el uso intensivo que hacen de este tipo de productos, y por su potencial como consumidores cuando lleguen a la edad adulta. No obstante, ante el aumento generalizado de la inflación, algunos consumidores muy sensibles al precio han empezado a desarrollar métodos caseros de protección solar, como las cremas de aloe vera o aceite de coco, con óxido de zinc o sustitutos similares.</p>
+                        <img src="../images/turistas.jpg" alt="Tourists taking a photo" class="content-image image-float-right">
+                        <h3 id="segmentacion">Tipos de consumidores</h3>
+                        <p>Sin embargo, las diferencias más notables se refieren a las actitudes que los distintos grupos de consumidores tienen con respecto a este tipo de productos. Según estas características actitudinales, se han llegado a distinguir tres segmentos de mercado:</p>
+                        <p style="color:#f07a00;"><b>Deportistas</b></p>
+                        <p>Suponen el 31% de la población y son personas que hacen deporte al aire libre con frecuencia (todos los días, o varios días por semana), y son conscientes de que la protección de la piel es importante. No obstante, son relativamente sensibles al precio, ya que su consumo de este producto es elevado, aunque suelen fijarse en la composición del protector, tratando de elegir marcas de confianza que cumplan con las necesidades que requiere su uso durante la actividad deportiva.</p>
+                        <p style="color:#f07a00;"><b>Turistas</b></p>
+                        <p>Este es el segmento más numeroso de los tres, ya que supone el 55% de la población. A pesar de su denominación, en este grupo se incluyen todos aquellos individuos que viajan por motivos de ocio o vacaciones, y se nutre tanto del turismo exterior (extranjeros) como del turismo interior (turismo nacional). Este tipo de consumidor le da mucha importancia al precio de estos productos porque, a pesar de que son conscientes de la necesidad de proteger la piel, no son su prioridad, y piensan que su uso disminuye sensiblemente el bronceado. En este sentido, son los consumidores más funcionales, de modo que buscan productos que cumplan correctamente con su cometido, pero al precio más asequible posible.</p>
+                        <p style="color:#f07a00;"><b>Presumidos</b></p>
+                        <p>Está formado por los consumidores preocupados fundamentalmente por la belleza. Suponen el 14% de la población y son conscientes de la protección que necesita la piel, pero no tanto por razones de salud, sino por cuestiones estéticas. Por ello, además de dar cierta importancia al factor de protección, están muy interesados en las propiedades cosméticas adicionales del producto, confiando solamente en marcas premium, y sin importarles en exceso tener que pagar un precio mayor por marcas reconocidas y de calidad superior.</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 - Versión 1.2 // Desarrollado con fines formativos.</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const navbar = document.querySelector('.navbar');
+        const hamburger = document.querySelector('.hamburger-menu');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        // --- Mobile Menu Logic ---
+        hamburger.addEventListener('click', () => navMenu.classList.toggle('active'));
+        document.querySelectorAll('.dropdown > a').forEach(dropdownLink => {
+            dropdownLink.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    dropdownLink.parentElement.classList.toggle('open');
+                }
+            });
+        });
+        document.addEventListener('click', (e) => {
+            if (navMenu.classList.contains('active') && !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                navMenu.classList.remove('active');
+                document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+            }
+        });
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            if (!link.parentElement.classList.contains('dropdown')) {
+                link.addEventListener('click', () => {
+                    if (navMenu.classList.contains('active')) {
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+        
+        // --- Navbar Scroll Effect ---
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) { navbar.classList.add('navbar-scrolled'); } 
+            else { navbar.classList.remove('navbar-scrolled'); }
+        });
+        // --- Chart.js Logic (Integrated) ---
+        let myChartInstance = null;
+        function generateColorPalette(hexColor, count) {
+            const palette = [];
+            const baseR = parseInt(hexColor.slice(1, 3), 16);
+            const baseG = parseInt(hexColor.slice(3, 5), 16);
+            const baseB = parseInt(hexColor.slice(5, 7), 16);
+            for (let i = 0; i < count; i++) {
+                const opacity = 0.9 - (i * 0.03); 
+                palette.push(`rgba(${baseR}, ${baseG}, ${baseB}, ${opacity})`);
+            }
+            return palette;
+        }
+        
+        function renderChart() {
+            if (myChartInstance) { myChartInstance.destroy(); }
+            const ctx = document.getElementById('myBarChart').getContext('2d');
+            const styles = getComputedStyle(document.body);
+            const textColor = styles.getPropertyValue('--text-color');
+            const gridColor = styles.getPropertyValue('--border-color');
+            const accentColor = styles.getPropertyValue('--accent-color').trim();
+            myChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ["Relación calidad-precio", "Calidad", "Adecuado a mi tipo de piel", "Funciones y beneficios", "Precio bajo", "Calidad muy alta", "Hipopalergénico", "Marca reconocida", "Multifuncional", "Natural u orgánico", "Tipo de formato", "Ingredientes", "Respetuoso con el medio ambiente", "Claims en el etiquetado", "Tipo de aplicador", "Marca internacional", "Adaptado a mi género", "Marca premium", "Adaptado a mi raza o etnia", "Marca local", "Patrocinado por famosos", "Alto precio", "Ninguna de estos factores", "Otros"],
+                    datasets: [{
+                        label: 'Atributo',
+                        data: [42, 38, 33, 32, 29, 27, 26, 26, 23, 22, 18, 18, 17, 15, 11, 10, 10, 10, 9, 8, 7, 3, 6, 2],
+                        backgroundColor: generateColorPalette(accentColor, 24),
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', 
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'Figura 1: Relación de atributos y valoración del consumidor', color: textColor, font: { size: 18, family: 'Poppins' }}
+                    },
+                    scales: {
+                        x: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: textColor, font: { family: 'Lato' } }},
+                        y: { grid: { display: false }, ticks: { color: textColor, font: { family: 'Lato' } }}
+                    }
+                }
+            });
+        }
+        
+        // --- Theme Management (triggers chart re-render) ---
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') { body.classList.add('light-mode'); }
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+            setTimeout(renderChart, 50); 
+        });
+        
+        // Initial chart render on page load
+        renderChart();
+        // --- NEW: Side Nav Scrollspy Logic ---
+        const sections = document.querySelectorAll('.main-article h3[id]');
+        const sideNavLinks = document.querySelectorAll('.side-nav li a');
+        const activateSideNav = () => {
+            let current = '';
+            const navHeight = navbar.offsetHeight;
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - navHeight - 40; // Add extra offset
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            sideNavLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', activateSideNav);
+        document.addEventListener('DOMContentLoaded', activateSideNav); // Activate on page load
+    </script>
+</body>
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variables de Decisión | Marketo</title>
+    
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* --- 1. CSS Variables and Global Styles --- */
+        html, body { scrollbar-width: none; -ms-overflow-style: none; overflow: -moz-scrollbars-none; }
+        html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+        :root {
+            --bg-color: #121212; --primary-surface-color: #1E1E1E; --accent-color: #F57C00;
+            --accent-hover-color: #FB8C00; --text-color: #c7c7c7; --heading-color: #ffffff;
+            --border-color: #333333; --navbar-height: 70px;
+        }
+        body.light-mode {
+            --bg-color: #f8f9fa; --primary-surface-color: #ffffff; --text-color: #333;
+            --heading-color: #2c3e50; --border-color: #e0e0e0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Lato', sans-serif; font-size: 16px; line-height: 1.6; color: var(--text-color); background-color: var(--bg-color); transition: background-color 0.3s ease, color 0.3s ease; }
+        h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--heading-color); line-height: 1.2; }
+        a { text-decoration: none; color: var(--accent-color); transition: color 0.3s ease; }
+        a:hover { color: var(--accent-hover-color); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 80px 0; }
+        
+        /* --- 2. Navigation Bar --- */
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; height: var(--navbar-height); background-color: var(--primary-surface-color); z-index: 1000; transition: box-shadow 0.3s ease, background-color 0.3s ease; border-bottom: 1px solid var(--border-color); }
+        .navbar-scrolled { background-color: rgba(30, 30, 30, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3); }
+        body.light-mode .navbar-scrolled { background-color: rgba(255, 255, 255, 0.85); }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; height: 100%; }
+        .navbar-logo { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--heading-color); }
+        .navbar-logo i { color: var(--accent-color); margin-right: 8px; }
+        .nav-menu { display: flex; align-items: center; gap: 30px; }
+        .nav-links { display: flex; list-style: none; gap: 40px; }
+        .nav-links a { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; color: var(--text-color); position: relative; padding-bottom: 5px; }
+        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background-color: var(--accent-color); transition: width 0.3s ease; }
+        .nav-links > li > a:hover { color: var(--heading-color); }
+        .nav-links > li > a:hover::after { width: 100%; }
+        .nav-links a.active { color: var(--accent-color); }
+        .nav-links > li > a.active::after { width: 100%; }
+        .dropdown { position: relative; }
+        .dropdown-menu { display: none; position: absolute; top: 110%; left: 50%; transform: translateX(-50%); background-color: var(--primary-surface-color); list-style: none; padding: 10px 0; margin: 0; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); min-width: 220px; z-index: 1001; border: 1px solid var(--border-color); }
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu li a { display: block; padding: 12px 20px; color: var(--text-color); font-size: 0.95rem; transition: background-color 0.2s ease, color 0.2s ease; }
+        .dropdown-menu li a:hover { color: var(--heading-color); background-color: var(--border-color); }
+        .dropdown-menu li a::after { content: none; }
+        .dropdown-menu li a.active { color: var(--accent-color); font-weight: 700; }
+        .dropdown > a i { margin-left: 8px; font-size: 0.8em; transition: transform 0.3s ease; }
+        .dropdown:hover > a i { transform: rotate(180deg); }
+        .dropdown > a.noclick { cursor: default; }
+        .dropdown > a.noclick:hover::after { width: 0; }
+        #theme-toggle { background: none; border: none; color: var(--accent-color); font-size: 1.4rem; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; }
+        #theme-toggle .fa-sun { display: none; }
+        body.light-mode #theme-toggle .fa-sun { display: block; }
+        body.light-mode #theme-toggle .fa-moon { display: none; }
+        .hamburger-menu { display: none; }
+        
+        /* --- 3. Page Content Styles --- */
+        main { padding-top: var(--navbar-height); }
+        .footer { background-color: var(--primary-surface-color); color: var(--text-color); text-align: center; padding: 40px 0; border-top: 1px solid var(--border-color); }
+        
+        /* --- MODIFIED: Page Header with Background Image --- */
+        .page-header {
+            text-align: center;
+            padding: 100px 0; /* Increased padding */
+            border-bottom: 1px solid var(--border-color);
+            position: relative; /* Needed for the overlay */
+            background-image: url(..//images/variables.jpg); /* New strategy-themed image */
+            background-size: cover;
+            background-position: center 30%; /* Adjust position to focus on the table */
+            background-attachment: fixed; /* Parallax effect */
+            overflow: hidden;
+        }
+        /* --- NEW: Header Overlay for Readability --- */
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(18, 18, 18, 0.7); /* Dark overlay */
+            z-index: 1;
+            transition: background-color 0.3s ease;
+        }
+        body.light-mode .page-header::before {
+            background-color: rgba(255, 255, 255, 0.75); /* Light overlay */
+        }
+        /* --- NEW: Ensure Header Text is Above Overlay --- */
+        .page-header h1, .page-header p {
+            position: relative;
+            z-index: 2; /* Sits on top of the overlay */
+        }
+        .page-header h1 { font-size: 3rem; margin-bottom: 10px; }
+        .page-header p { font-size: 1.2rem; max-width: 700px; margin: 0 auto; color: var(--text-color); }
+
+        /* Main content layout for side nav */
+        .content-wrapper {
+            display: flex;
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .main-article {
+            flex: 1;
+            min-width: 0;
+        }
+        .content-section { padding-top: 60px; padding-bottom: 0; }
+        .content-section .container { max-width: 800px; padding: 0; margin: 0; }
+        
+        .content-section p { margin-bottom: 1.5em; font-size: 1.1rem; line-height: 1.7; }
+        .content-section ul { list-style-position: inside; }
+        .content-section h3 { font-size: 1.8rem; margin-top: 2em; margin-bottom: 1em; border-left: 4px solid var(--accent-color); padding-left: 15px; }
+        .content-section h3:first-of-type { margin-top: 0; }
+        .content-section h4 { font-size: 1.2rem; margin-top: 2em; margin-bottom: 1em; color: var(--accent-color); font-weight: 700;}
+        .content-image { width: 100%; height: auto; border-radius: 8px; margin: 30px auto; border: 1px solid var(--border-color); display: block; }
+        .callout { margin: 40px 0; padding: 30px; background-color: var(--primary-surface-color); border-left: 5px solid var(--accent-color); border-radius: 0 8px 8px 0; clear: both;}
+        .callout p { font-family: 'Poppins', sans-serif; font-style: italic; font-size: 1.2rem; color: var(--heading-color); margin: 0; }
+        .callout p::before { content: '\f10d'; font-family: "Font Awesome 6 Free"; font-weight: 900; color: var(--accent-color); font-size: 1.5rem; margin-right: 15px; font-style: normal; }
+        .image-float-right { float: right; width: 40%; max-width: 300px; margin: 10px 0 15px 25px; border-radius: 8px; }
+        .image-float-left { float: left; width: 60%; max-width: 500px; margin: 10px 25px 15px 0; border-radius: 8px; }
+        .padding-indent { padding-left: 50px; }
+        
+        /* --- 4. Table Styles --- */
+        .table-container { margin: 60px 0; }
+        .content-section table { width: 100%; border-collapse: collapse; font-size: 1rem; overflow: hidden; border-radius: 8px; }
+        .content-section th, .content-section td { padding: 15px 20px; text-align: left; border: none; }
+        .content-section th:not(:first-child), .content-section td:not(:first-child) { text-align: right; }
+        .content-section thead th { background-color: #2c3e50; color: #ffffff; font-weight: 600; font-family: 'Poppins', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        .content-section tbody tr:nth-child(even) { background-color: var(--primary-surface-color); }
+        .content-section tbody tr:nth-child(odd) { background-color: var(--bg-color); }
+        body.light-mode .content-section tbody tr:nth-child(even) { background-color: #f7f7f7; }
+        body.light-mode .content-section tbody tr:nth-child(odd) { background-color: var(--primary-surface-color); }
+        .content-section caption { caption-side: top; text-align: left; padding-bottom: 15px; font-family: 'Poppins', sans-serif; font-size: 1.3rem; font-weight: 600; color: var(--heading-color); }
+        .table-footnote { margin-top: 15px; font-size: 0.9rem; font-style: italic; color: var(--text-color); opacity: 0.85; text-align: left; }
+        
+        /* --- 5. NEW: Side Navigation --- */
+        .side-nav {
+            flex: 0 0 220px;
+            align-self: flex-start;
+            position: sticky;
+            top: calc(var(--navbar-height) + 40px);
+            padding-top: 60px;
+            height: calc(100vh - var(--navbar-height));
+            overflow-y: auto;
+        }
+        .side-nav-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .side-nav ul { list-style: none; }
+        .side-nav li a {
+            display: block;
+            padding: 8px 15px;
+            margin-bottom: 5px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease-in-out;
+        }
+        .side-nav li a:hover {
+            background-color: var(--primary-surface-color);
+            color: var(--heading-color);
+        }
+        .side-nav li a.active {
+            color: var(--accent-color);
+            font-weight: 700;
+            background-color: var(--primary-surface-color);
+            border-left-color: var(--accent-color);
+        }
+        /* --- 6. Mobile Responsiveness --- */
+        @media (max-width: 992px) {
+             .side-nav { display: none; }
+             .content-wrapper { display: block; }
+             .content-section .container { max-width: 800px; margin: 0 auto; padding: 0 20px;}
+        }
+        @media (max-width: 768px) {
+            section { padding: 60px 0; }
+            .page-header { padding: 80px 0; background-attachment: scroll; } /* Adjusted padding and fixed attachment */
+            .page-header h1 { font-size: 2.2rem; }
+            .content-section { padding-top: 40px; }
+            .content-section .image-float-right, .content-section .image-float-left { float: none; width: 100%; max-width: 100%; margin: 20px auto; }
+            .callout { margin: 30px 0; padding: 20px; }
+            .callout p { font-size: 1.1rem; }
+            .table-container { overflow-x: auto; }
+            .padding-indent { padding-left: 20px; }
+            /* --- Navbar Fixes --- */
+            .navbar .container { justify-content: space-between; }
+            .hamburger-menu { display: block; font-size: 1.5rem; color: var(--heading-color); background: transparent; border: none; cursor: pointer; z-index: 1002; }
+            .nav-menu {
+                position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
+                background-color: var(--primary-surface-color);
+                flex-direction: column; justify-content: center; align-items: center;
+                gap: 40px; transition: right 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+                box-shadow: -5px 0 15px rgba(0,0,0,0.2); padding: 20px;
+            }
+            .nav-menu.active { right: 0; }
+            .nav-links { flex-direction: column; gap: 25px; width: 100%; text-align: center; margin-top: 40px; }
+            .dropdown:hover .dropdown-menu { display: none; }
+            
+            /* --- Mobile Dropdown/Accordion Styles --- */
+            .dropdown > a { display: flex; justify-content: center; align-items: center; gap: 8px; }
+            .dropdown > a i { display: inline-block; transition: transform 0.3s ease; }
+            .dropdown.open > a i { transform: rotate(180deg); }
+            .dropdown .dropdown-menu {
+                display: none; position: static; transform: none; box-shadow: none; border: none;
+                background-color: rgba(0,0,0,0.15); min-width: unset;
+                padding: 10px 0; margin-top: 15px; border-radius: 8px;
+            }
+            body.light-mode .dropdown .dropdown-menu { background-color: rgba(0,0,0,0.05); }
+            .dropdown.open .dropdown-menu { display: block; }
+            .dropdown-menu li a { padding: 10px 20px; font-size: 0.9rem; }
+            #theme-toggle { position: absolute; bottom: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+      <div class="container">
+        <a class="navbar-logo" href="../index.html"
+          ><i class="fa-solid fa-chart-simple"></i>Mar<span style="color: var(--accent-color)">k</span>eto!</a
+        ><button aria-label="Toggle menu" class="hamburger-menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <nav class="nav-menu">
+          <ul class="nav-links">
+            <li><a class="active" href="../index.html">Inicio</a></li>
+            <li class="dropdown">
+              <a class="noclick" href="#"
+                >Guía <i class="fa-solid fa-caret-down"></i
+              ></a>
+              <ul class="dropdown-menu">
+                <li><a href="guia-fase2.html">Análisis del mercado</a></li>
+                <li>
+                  <a href="guia-fase3.html">Comportamiento del consumidor</a>
+                </li>
+                <li><a href="guia-fase4.html">Variables de decisión</a></li>
+              </ul>
+            </li>
+            <li><a href="guia-fase5.html">Dinámica de juego</a></li>
+            <li><a href="decisiones.html">Decisiones y resultados</a></li>
+            <li><a href="contact.html">Soporte</a></li>
+          </ul>
+          <button id="theme-toggle" title="Toggle theme">
+            <i class="fa-solid fa-moon"></i><i class="fa-solid fa-sun"></i>
+          </button>
+        </nav>
+      </div>
+    </header>
+    <main>
+        <section class="page-header">
+            <h1>Variables de decisión</h1>
+            <p>Estrategias del mix de marketing.</p>
+        </section>
+        <!-- NEW: Content Wrapper for Flexbox Layout -->
+        <div class="content-wrapper">
+            
+            <!-- NEW: Side Navigation Menu -->
+            <nav class="side-nav">
+                <p class="side-nav-title">En esta página</p>
+                <ul>
+                    <li><a href="#introduccion">Introducción</a></li>
+                    <li><a href="#fabricacion">Fabricación</a></li>
+                    <li><a href="#precio">Precio</a></li>
+                    <li><a href="#distribucion">Distribución</a></li>
+                    <li><a href="#diseno-producto">Diseño de Producto</a></li>
+                    <li><a href="#comunicacion">Comunicación</a></li>
+                </ul>
+            </nav>
+            <!-- NEW: Main Article Content Wrapper -->
+            <div class="main-article">
+                <section class="content-section">
+                    <div class="container">
+                        <h3 id="introduccion">Introducción</h3>
+                        <p>Las decisiones se deben tomar para el mercado español y, a efectos del simulador, todas las empresas parten de la misma situación inicial, evitando así diferencias entre los equipos competidores. Del mismo modo, el presupuesto disponible es idéntico para todas ellas, de modo que tengan exactamente las mismas oportunidades de crecimiento en el mercado.</p>
+                        <p>El simulador cuenta con un abanico básico de decisiones, organizadas del siguiente modo:</p>
+                        <div class="padding-indent">
+                            <ul>
+                                <li>Decisiones de fabricación</li>
+                                <li>Decisiones de precio</li>
+                                <li>Decisiones de distribución</li>
+                                <li>Decisiones de diseño de producto</li>
+                                <li>Decisiones de comunicación</li>
+                            </ul>
+                        </div>
+                        <br>
+                        <p>Además de estas decisiones, que tienen un carácter explícito porque inciden directamente en el presupuesto de cada empresa, hay decisiones estratégicas implícitas, como las decisiones de segmentación, la estrategia de competitividad, o la estrategia de posicionamiento, que intervienen de forma indirecta en el proceso de toma de decisiones, ya que no implican una asignación concreta del presupuesto disponible.</p>
+                        <blockquote class="callout">
+                            <p>Las decisiones del simulador se deben tomar exclusivamente para el mercado español.</p>
+                        </blockquote>
+                        <p>A continuación, se describe en qué consisten estas decisiones, además de aportar información que será útil durante el juego. La secuencia de las decisiones no tiene ninguna relevancia, y no es necesario tomarlas en el mismo orden que aquí se exponen.</p>
+                        
+                        <h3 id="fabricacion">Decisiones de fabricación</h3>
+                        <img src="../images/fabrica.jpg" alt="Industrial factory interior" class="content-image image-float-right">
+                        <p>El simulador incorpora una decisión muy importante en cuanto a los resultados comerciales se refiere, que consiste en establecer el número de unidades a fabricar. La fabricación del producto es uno de los costes más importantes para la marca, y establece un límite físico a la cantidad de producto que se puede vender. Por otra parte, si no se agota la cantidad de producto fabricada en el periodo de decisión correspondiente, el stock sobrante generará unos costes (almacenaje, etc.) que se descontarían de los ingresos obtenidos.</p>
+                        <p>Además, la gestión del stock tiene las siguientes particularidades:</p>
+                        <div class="padding-indent">
+                            <ul>
+                                <li>El stock generado en el Período I estará disponible para su venta en el Período II.</li>
+                                <li>El diseño del producto que está en stock se puede modificar para el Período II (Factor de protección, resistencia al agua, envase, etc.).</li>
+                                <li>En caso de que se modifique el diseño del producto que está en stock, se computarán los costes de modificación correspondientes. Es decir, si se mejoran las características del producto, se computará el coste adicional que supongan dichas mejoras, y si se reducen, se abonará la cantidad correspondiente en la cuenta de resultados.</li>
+                            </ul>
+                        </div>
+                        
+                        <h3 id="precio">Decisiones de precio</h3>
+                        <p>El mercado de los productos destinados a la protección solar muestra una heterogeneidad muy grande de precios. Tomando como unidad básica el envase de 100 ml., los precios oscilan entre los 4€ de los productos más económicos, hasta los 80€ de las marcas más exclusivas. Es importante tener en cuenta que estos son los precios actuales del mercado, pero no existe información fiable sobre cuál debería ser el precio mínimo aceptado por el consumidor, ni tampoco sobre el máximo que podría estar dispuesto pagar. Sin embargo, sí hay investigaciones que muestran que, en esta categoría, la demanda es bastante elástica con respecto al precio en algunos segmentos.</p>
+                        <blockquote class="callout">
+                            <p>Los precios oscilan entre los 4€ de los productos más económicos, hasta los 40€ de las marcas más exclusivas.</p>
+                        </blockquote>
+                        
+                        <h3 id="distribucion">Decisiones de distribución</h3>
+                        <p>Las decisiones de Distribución Comercial constan de tres canales diferentes, en los que se debe decidir el presupuesto destinado a cada uno de ellos. Cuanto más presupuesto se destine a un canal, mayor esfuerzo estará haciendo la empresa para llegar a los consumidores finales. Los tres canales son Hipermercados, Supermercados y Tiendas especializadas, que incluyen farmacias, parafarmacias, droguerías y perfumerías. Todas las enseñas cuentan con venta física y online, aunque el porcentaje de ventas en establecimientos físicos en esta categoría aún es muy alto (77%). Las decisiones de inversión se deben expresar en euros, y conviene tener en cuenta que la cobertura de la distribución física tiene un límite, impuesto por el número de establecimientos que existen en el mercado.</p>
+                        
+                        <h3 id="diseno-producto">Decisiones de diseño de producto</h3>
+                        <p>El simulador permite diseñar y realizar modificaciones en las características físicas del producto, y cada una de esas modificaciones lleva asociado un coste determinado. Las características disponibles son las siguientes: factor de protección, ingredientes naturales, nivel de resistencia al agua, componentes vitamínicos C y E, y tipo de envase. El diseño de los componentes del producto se realiza a partir de una escala de 0 a 10 puntos (hay excepciones cuando la característica no puede ser cero, como en el factor de protección), salvo el tipo de envase, que tiene un coste fijo estipulado en la Tabla 4. Se debe tener en cuenta el “coste por punto” que se refleja en la Tabla 3, e investigaciones que señalan que no siempre es mejor aumentar una característica de forma indefinida, y que puede existir una combinación óptima que proporcionaría los mejores resultados en términos de preferencia, satisfacción y lealtad del consumidor.</p>
+                        <div class="table-container">
+                            <table>
+                                <caption>Tabla 3. Coste en euros de cada punto adicional en las características del producto</caption>
+                                <thead>
+                                    <tr>
+                                        <th>Característica</th>
+                                        <th>Coste por punto (€)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Factor de protección</td><td>0.45</td></tr>
+                                    <tr><td>Ingredientes naturales</td><td>1.22</td></tr>
+                                    <tr><td>Resistencia al agua</td><td>0.72</td></tr>
+                                    <tr><td>Vitaminas C y E</td><td>1.45</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h4>Factor de protección</h4>
+                        <p>El factor de protección solar (FPS) es una medida que indica hasta qué punto la piel estará protegida de los rayos ultravioleta. Este tipo de radiación puede causar quemaduras, daños permanentes en la piel, y es un factor de riesgo en la mayoría de los tipos de cáncer de piel. El FPS oscila entre valores muy bajos (1 o 2), hasta valores iguales o superiores a 50. No obstante, la escala de protección no es lineal y, por ejemplo, un FPS de 15 bloquea el 93% de los rayos ultravioleta, un FPS de 30 bloquea el 97%, y un FPS de 50 bloquea el 98% de la radiación.</p>
+                        <p>Hay otros factores que influyen en los posibles efectos perjudiciales de la exposición prolongada al sol. Entre ellos están las condiciones meteorológicas (mayor o menor emisión de radiación ultravioleta), la hora del día, el tipo de piel, el modo de aplicación del protector, o la cantidad que se usa en cada aplicación. Hay que tener en cuenta, no obstante, que la aplicación de los protectores solares inhibe la capacidad de la piel de producir vitamina D, y que su ausencia puede ser causa de numerosas patologías, como pérdida de densidad ósea, que podría generar osteoporosis y fracturas, o raquitismo en los niños. Además, la falta de vitamina D también puede estar asociada a otras afecciones médicas, como la diabetes, la hipertensión, o la esclerosis múltiple. Esto explica por qué hay consumidores reacios a utilizar este tipo de productos, que prefieren exponerse al sol de forma natural, pero con cautela.</p>
+                        <p>La escala de decisión relativa al FPS en el simulador tiene un rango de 1 a 10, con la correspondencia en coste que aparece en la Tabla 3.</p>
+                        <h4>Ingredientes naturales</h4>
+                        <p>Los protectores solares pueden estar compuestos en parte, o exclusivamente, de ingredientes naturales u orgánicos. Aunque la variedad es cada vez más amplia, los más comunes son los que incluyen “aloe vera”, mantecas, aceites esenciales, o minerales como el óxido de zinc. El diseño de protectores solares naturales encarece de forma significativa el producto, pero hay consumidores preocupados por este tipo de componentes, y por todo lo que tenga que ver con el cuidado del medio ambiente.</p>
+                        <p>En el simulador, la cantidad de ingredientes naturales se puede indicar en una escala de 0 a 10, en la que 0 indica la ausencia de ingredientes naturales, mientras que una puntuación igual a 10 indicaría que el producto está compuesto íntegramente por este tipo de compuestos naturales y ecológicos.</p>
+                        <h4>Resistencia al agua</h4>
+                        <p>La resistencia al agua, al sudor o a la humedad en general, es una de las propiedades que se encuentran con más frecuencia en la oferta actual del mercado. Aunque parte de los consumidores desconfían de la capacidad de resistencia a la humedad que tienen los protectores solares, lo cierto es que dicha capacidad solo es eficiente si el producto se utiliza de forma adecuada.</p>
+                        <p>En el simulador se puede especificar la resistencia al agua, sudor, etc., del protector solar mediante una escala de 0 a 10. El cero indicaría la ausencia de componentes que mantengan intacto el efecto del protector tras su contacto con el agua, mientras que una puntuación de diez indicaría la máxima resistencia del protector solar frente a cualquier tipo de interacción con la humedad.</p>
+                        <h4>Vitaminas C y E</h4>
+                        <p>La protección de la piel no solamente consiste en la filtración de la radiación ultravioleta. Los consumidores son cada vez más conscientes de los cuidados adicionales que se necesitan, y los fabricantes han optado por incluir componentes vitamínicos que complementan la acción del protector solar. Entre los más populares se encuentran aquellos que incluyen vitaminas C y E. La vitamina C es muy eficaz sintetizando colágeno, ayudando así a mantener la elasticidad de la piel y a evitar su envejecimiento prematuro. Por otra parte, la vitamina E parece tener propiedades antioxidantes, y ayuda a la renovación de los tejidos dañados, especialmente si ese daño ha sido producido por quemaduras solares.</p>
+                        <p>El simulador permite la incorporación de estas vitaminas al producto mediante una escala de 0 a 10. El cero indicaría la ausencia de vitaminas C y E, y el 10 la cantidad máxima permitida por los organismos reguladores, según se establece en el reglamento 1223/2009 del Parlamento Europeo.</p>
+                        <h4>Tipo de envase</h4>
+                        <p>En el mercado se pueden encontrar diferentes sistemas de envasado y aplicación del producto. Aunque los más comunes son los envases clásicos, con un simple tapón, existen otros más sofisticados con distintas características. El objetivo siempre suele estar relacionado con la facilidad de aplicación, y con la correcta difusión de la cantidad idónea de protector solar.</p>
+                        <img src="../images/envases.png" alt="Different types of product packaging" class="content-image">
+                        <p class="table-footnote">Figura 2: Tipos de envase.</p>
+                        <div class="table-container">
+                            <table>
+                                <caption>Tabla 4. Coste unitario en euros de cada tipo de envase</caption>
+                                <thead>
+                                    <tr>
+                                        <th>Tipo de envase</th>
+                                        <th>Coste unitario (€)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Clásico</td><td>0.31</td></tr>
+                                    <tr><td>Tubo</td><td>0.42</td></tr>
+                                    <tr><td>Dosificador</td><td>0.83</td></tr>
+                                    <tr><td>Stick</td><td>0.68</td></tr>
+                                    <tr><td>Tarro</td><td>0.52</td></tr>
+                                    <tr><td>Aerosol</td><td>0.96</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <h3 id="comunicacion">Decisiones de comunicación</h3>
+                        <p>Las decisiones de comunicación se desglosan en dos bloques: a) inversión económica en televisión, radio, revistas y prensa, e Internet, y b) tipo de mensaje. La inversión económica se debe establecer en euros, y se debe tener en cuenta que el simulador no solo tiene en cuenta la presión publicitaria en cada medio, sino también las posibles interacciones que se produzcan entre ellos. Los medios incluidos contienen, en mayor o menor medida, relación con los segmentos de los que consta la categoría de producto.</p>
+                        <blockquote class="callout">
+                            <p>El simulador permite la posibilidad de combinar entre sí todos los tipos de mensaje.</p>
+                        </blockquote>
+                        <p>No obstante, las inversiones en comunicación pueden ser más o menos efectivas en función del mensaje elegido. El simulador permite elegir entre seis opciones distintas que se pueden combinar sin ningún tipo de restricción. Dichas opciones son las siguientes: social, humor, miedo, romance, aventura y éxito. A continuación, se describe brevemente cada una de ellas, y el sistema de elección correspondiente.</p>
+                        <img src="../images/advertising.jpg" alt="Person watching ads on a large screen" class="content-image image-float-left">
+                        <p>Cuando el argumento se centra en el tono “social”, se destacan beneficios relacionados con la aceptación social, la facilidad para integrarse en grupos sociales, o la posibilidad de destacar dentro de un grupo social. Por otra parte, el tono “humorístico” hace referencia a situaciones desenfadadas, divertidas y, por tanto, de actitudes positivas narradas desde un punto de vista cómico. La apelación al “miedo”, uno de los recursos más utilizadas en publicidad, se centra en destacar las consecuencias negativas de la falta de protección en la piel (aparición de enfermedades graves, etc.), y suelen apoyarse en mensajes de tipo testimonial, con personas que las han sufrido. El siguiente tono disponible en el simulador es el “romance” en todas sus variantes, incluida la apelación al sexo, uno de los recursos más utilizados y estudiados en la comunicación publicitaria. En esta opción, el mensaje se centraría en los beneficios asociados al protector solar que pueden resultan atrayentes o atractivos para otras personas. La siguiente opción se centra en el concepto de “aventura”, destacando beneficios relacionados con lo emocionante, lo desconocido, o el descubrimiento. Por último, el “éxito” también es uno de los recursos narrativos más frecuentes en los mensajes publicitarios. En este caso, los beneficios van asociados al éxito profesional que, en general, suele relacionarse con la riqueza material, el estatus que proporcionan ciertas actividades, cargos de responsabilidad, etc., o la satisfacción con un determinado estilo de vida.</p>
+                        <img src="../images/collage.png" alt="Collage of diverse lifestyle images for advertising" class="content-image image-float-right">
+                        <p>El modo de establecer el tono del mensaje en el simulador es a través de una escala de 0 a 10 para cada una de las opciones disponibles. El cero indicaría la ausencia absoluta de elementos relacionados con un determinado tono en el mensaje, y el diez representaría la máxima presencia del tono seleccionado. El simulador permite la posibilidad de combinar los tipos de mensaje del modo que se considere oportuno. Por ejemplo, el tono del mensaje puede ser de “humor” y “aventura” al mismo tiempo. Sin embargo, algunas combinaciones pueden ser menos compatibles como, por ejemplo, la apelación al “miedo”, y el “humor”. En cualquier caso, el simulador permite cualquier combinación, dejando al criterio de la marca cómo diseñar el contenido del mensaje. Conviene mencionar que la elección del tipo de mensaje no genera ningún coste para la empresa, y el simulador no contempla posibles diferencias relacionadas con los costes de producción, realización, etc., del mensaje publicitario.</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 - Versión 1.2 // Desarrollado con fines formativos.</p>
+        </div>
+    </footer>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const navbar = document.querySelector('.navbar');
+        const hamburger = document.querySelector('.hamburger-menu');
+        const navMenu = document.querySelector('.nav-menu');
+        
+        // --- Theme Management ---
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+        }
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+        
+        // --- Navbar Scroll Effect ---
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+        });
+        
+        // --- Hamburger Menu Toggle ---
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        
+        // --- Mobile Accordion Dropdown Logic ---
+        document.querySelectorAll('.dropdown > a').forEach(dropdownLink => {
+            dropdownLink.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    const dropdown = dropdownLink.parentElement;
+                    dropdown.classList.toggle('open');
+                }
+            });
+        });
+        
+        // --- Click outside to close mobile menu ---
+        document.addEventListener('click', (e) => {
+            if (navMenu.classList.contains('active') && !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                navMenu.classList.remove('active');
+                document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+            }
+        });
+        
+        // --- Close menu when a link is clicked ---
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            if (!link.parentElement.classList.contains('dropdown')) {
+                link.addEventListener('click', () => {
+                    if (navMenu.classList.contains('active')) {
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+        // --- NEW: Side Nav Scrollspy Logic ---
+        const sections = document.querySelectorAll('.main-article h3[id]');
+        const sideNavLinks = document.querySelectorAll('.side-nav li a');
+        
+        const activateSideNav = () => {
+            let current = '';
+            const navHeight = navbar.offsetHeight;
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - navHeight - 40; // Add extra offset
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            sideNavLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', activateSideNav);
+        document.addEventListener('DOMContentLoaded', activateSideNav); // Activate on page load
+    </script>
+</body>
+</html>

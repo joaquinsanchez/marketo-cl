@@ -1,0 +1,903 @@
+﻿<!DOCTYPE html><HTML lang=es><HEAD><TITLE>Decisiones y Resultados | Marketo</TITLE>
+<META charset=UTF-8>
+<META name=viewport content="width=device-width, initial-scale=1.0">
+<META name=description content="Centro de decisiones y resultados de la simulación empresarial Marketo. Gestiona las estrategias de marketing de tu equipo."><!-- Preconnect for performance --><LINK rel=preconnect href="https://fonts.googleapis.com"><LINK rel=preconnect href="https://fonts.gstatic.com" crossorigin><!-- Enhanced font selection --><LINK rel=stylesheet href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Poppins:wght@400;500;600;700&amp;display=swap"><!-- Font Awesome --><LINK rel=stylesheet href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="><!-- AOS Animation Library --><LINK rel=stylesheet href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<STYLE>        /* === CSS VARIABLES AND RESET === */        :root {
+            /* Simplified color palette with accent color focus */
+            --bg-color: #121212;
+            --primary-surface-color: #1e1e1e;
+            --secondary-surface-color: #2a2a2a;
+            --accent-color: #F57C00;
+            --accent-hover-color: #FB8C00;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --heading-color: #ffffff;
+            --border-color: #333333;
+            --navbar-height: 70px;
+            --section-padding: 80px;
+            --card-radius: 12px;
+            --transition-smooth: all 0.3s ease;
+            --shadow-subtle: 0 4px 15px rgba(0, 0, 0, 0.2);
+            --shadow-prominent: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        body.light-mode {
+            --bg-color: #f8f9fa;
+            --primary-surface-color: #ffffff;
+            --secondary-surface-color: #f8f9fa;
+            --text-color: #333;
+            --text-muted: #6c757d;
+            --heading-color: #2c3e50;
+            --border-color: #e0e0e0;
+            --shadow-subtle: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --shadow-prominent: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Enhanced reset and base styles */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }        html {
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        html::-webkit-scrollbar {
+            display: none;
+        }body {
+            font-family: "Inter", system-ui, -apple-system, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            transition: var(--transition-smooth);
+        }
+
+        /* Typography improvements */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: "Poppins", sans-serif;
+            font-weight: 600;
+            color: var(--heading-color);
+            line-height: 1.3;
+            letter-spacing: -0.02em;
+        }        .section-title {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            margin-bottom: 1rem;
+            color: var(--heading-color);
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+            line-height: 1.5;
+        }
+
+        /* Layout utilities */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: var(--section-padding) 0;
+            position: relative;
+        }        /* === NAVIGATION BAR === */
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; height: var(--navbar-height); background-color: var(--primary-surface-color); z-index: 1000; transition: box-shadow 0.3s ease, background-color 0.3s ease; border-bottom: 1px solid var(--border-color); }
+        .navbar-scrolled { background-color: rgba(30, 30, 30, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3); }
+        body.light-mode .navbar-scrolled { background-color: rgba(255, 255, 255, 0.85); }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; height: 100%; }        .navbar-logo { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--heading-color); text-decoration: none; }
+        .navbar-logo i { color: var(--accent-color); margin-right: 8px; }
+        .nav-menu { display: flex; align-items: center; gap: 30px; }
+        .nav-links { display: flex; list-style: none; gap: 40px; }        .nav-links a { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; color: var(--text-color); text-decoration: none; }
+        .nav-links > li > a:hover { color: var(--heading-color); }
+        .nav-links a.active { color: var(--accent-color); }
+        .dropdown { position: relative; }
+        .dropdown-menu { display: none; position: absolute; top: 110%; left: 50%; transform: translateX(-50%); background-color: var(--primary-surface-color); list-style: none; padding: 10px 0; margin: 0; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); min-width: 220px; z-index: 1001; border: 1px solid var(--border-color); }
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu li a { display: block; padding: 12px 20px; color: var(--text-color); font-size: 0.95rem; transition: background-color 0.2s ease, color 0.2s ease; }
+        .dropdown-menu li a:hover { color: var(--heading-color); background-color: var(--border-color); }
+        .dropdown-menu li a::after { content: none; }
+        .dropdown-menu li a.active { color: var(--accent-color); font-weight: 700; }
+        .dropdown > a i { margin-left: 8px; font-size: 0.8em; transition: transform 0.3s ease; }
+        .dropdown:hover > a i { transform: rotate(180deg); }
+        .dropdown > a.noclick { cursor: default; }
+        .dropdown > a.noclick:hover::after { width: 0; }
+        #theme-toggle { background: none; border: none; color: var(--accent-color); font-size: 1.4rem; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; }
+        #theme-toggle .fa-sun { display: none; }
+        body.light-mode #theme-toggle .fa-sun { display: block; }
+        body.light-mode #theme-toggle .fa-moon { display: none; }
+        .hamburger-menu { display: none; }/* === MAIN CONTENT === */
+        main {
+            padding-top: var(--navbar-height);
+            visibility: hidden;
+        }
+
+        body.authenticated main,
+        body.authenticated footer {
+            visibility: visible;
+        }        /* === ENHANCED CARD SYSTEM === */
+        .card-section {
+            padding: var(--section-padding) 0;
+        }        .card-section:not(:first-child) {
+            padding-top: 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .action-card {
+            background: var(--primary-surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .action-card:not(.disabled):hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-prominent);
+            border-color: var(--accent-color);
+        }
+
+        .card-image {
+            position: relative;
+            overflow: hidden;
+            height: 160px;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-smooth);
+        }
+
+        .action-card:not(.disabled):hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(245, 124, 0, 0.8);
+            opacity: 0;
+            transition: var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-card:not(.disabled):hover .card-overlay {
+            opacity: 1;
+        }
+
+        .overlay-icon {
+            color: white;
+            font-size: 2.5rem;
+            transform: scale(0);
+            transition: var(--transition-smooth);
+        }
+
+        .action-card:not(.disabled):hover .overlay-icon {
+            transform: scale(1);
+        }        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 300px;
+        }
+
+        .card-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: var(--heading-color);
+        }
+
+        .card-description {
+            color: var(--text-muted);
+            line-height: 1.5;
+            font-size: 0.9rem;
+            margin-bottom: auto;
+        }        .card-bottom {
+            margin-top: auto;
+            padding-top: 1.5rem;
+        }
+
+        .card-meta {
+            margin-bottom: 1.5rem;
+        }
+
+        .card-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .card-date i {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
+
+        .card-status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            border: 2px solid;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-status-indicator.ready {
+            color: #10b981;
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .card-status-indicator.in-progress {
+            color: #f59e0b;
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .card-status-indicator.coming-soon {
+            color: var(--text-muted);
+            border-color: var(--border-color);
+            background: rgba(255, 255, 255, 0.05);
+        }        .card-footer {
+            display: flex;
+            justify-content: center;
+            margin-top: 0;
+        }
+
+        .card-action-btn {
+            width: 100%;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-family: "Poppins", sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .card-action-btn:hover {
+            background: var(--accent-hover-color);
+            transform: translateY(-2px);
+            color: white;
+            box-shadow: var(--shadow-prominent);
+        }
+
+        .card-action-btn.disabled {
+            background: var(--border-color);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .card-action-btn.disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .card-period-badge {
+            align-self: flex-end;
+            background: var(--secondary-surface-color);
+            color: var(--text-color);
+            padding: 0.3rem 0.7rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Disabled card state */
+        .action-card.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .action-card.disabled .card-image {
+            filter: grayscale(100%);        }
+
+        /* === FOOTER === */
+        .footer {
+            background-color: var(--primary-surface-color);
+            color: var(--text-color);
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+        }/* === MOBILE RESPONSIVENESS === */
+        @media (max-width: 768px) {
+            :root {
+                --section-padding: 60px;
+                --navbar-height: 60px;
+            }
+
+            .navbar .container {
+                justify-content: space-between;
+            }
+
+            .hamburger-menu {
+                display: block;
+                font-size: 1.3rem;
+                color: var(--heading-color);
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                padding: 0.5rem;
+            }
+
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: var(--primary-surface-color);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+                padding: 2rem;
+                border-left: 1px solid var(--border-color);
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 1.5rem;
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav-links a {
+                font-size: 1rem;
+                padding: 1rem 0;
+            }
+
+            .dropdown:hover .dropdown-menu {
+                display: none;
+            }
+
+            .dropdown.open .dropdown-menu {
+                display: block;
+                position: static;
+                transform: none;
+                box-shadow: none;
+                border: none;
+                background: var(--secondary-surface-color);
+                margin-top: 1rem;
+                border-radius: 8px;
+            }
+
+            #theme-toggle {
+                position: absolute;
+                bottom: 2rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .card-content {
+                padding: 1.2rem;
+                height: auto;
+            }
+
+            .card-image {
+                height: 140px;            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .card-content {
+                padding: 1rem;
+            }
+
+            .footer-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }        #password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.4s ease;
+        }
+
+        body.light-mode #password-overlay {
+            background: rgba(248, 249, 250, 0.95);
+        }
+
+        #password-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #password-modal {
+            background: var(--primary-surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--card-radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-prominent);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        #password-modal.shake {
+            animation: shake 0.5s ease-in-out;
+        }#password-modal h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--heading-color);
+        }
+
+        #password-modal h2 i {
+            color: var(--accent-color);
+            margin-right: 0.75rem;
+        }
+
+        #password-modal p {
+            margin-bottom: 2rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        #username-input,
+        #password-input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            background: var(--secondary-surface-color);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-family: "Inter", sans-serif;
+            font-size: 1rem;
+            text-align: left;
+            transition: var(--transition-smooth);
+        }
+
+        #username-input:focus,
+        #password-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(245, 124, 0, 0.2);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 1rem 2rem;
+            font-family: "Poppins", sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-prominent);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: -1rem;
+            margin-bottom: 1rem;
+            display: none;
+            font-weight: 600;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-15px); }
+            40%, 80% { transform: translateX(15px); }
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* === UTILITY CLASSES === */
+        .text-center { text-align: center; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mb-4 { margin-bottom: 2rem; }
+        .mt-4 { margin-top: 2rem; }
+        .p-4 { padding: 2rem; }
+    </STYLE>
+</HEAD>
+<BODY>&lt; <!-- Password overlay -->
+<DIV id=password-overlay style="DISPLAY: none">
+<DIV id=password-modal>
+<H2><I class="fa-solid fa-shield-halved"></I>Acceso Seguro</H2>
+<P>Introduce tus credenciales para acceder al centro de decisiones</P>
+<FORM id=password-form><INPUT id=username-input required autocomplete="username" placeholder="Usuario"> <INPUT id=password-input type=password value="" required autocomplete="current-password" placeholder="Contraseña"> 
+<P id=error-message class=error-message>Usuario o contraseña incorrectos.</P><BUTTON class="btn btn-primary" type=submit><I class="fa-solid fa-sign-in-alt"></I>Acceder</BUTTON> </FORM></DIV></DIV><!-- Navigation --><HEADER class=navbar>
+<DIV class=container><A class=navbar-logo href="../index.html"><I class="fa-solid fa-chart-simple"></I>Mar<SPAN style="COLOR: ">k</SPAN>eto!</A><BUTTON aria-label="Toggle menu" class=hamburger-menu><I class="fa-solid fa-bars"></I></BUTTON> <NAV class=nav-menu>
+<UL class=nav-links>
+<LI><A href="../index.html">Inicio</A> 
+<LI class=dropdown><A class=noclick href="#">Guía <I class="fa-solid fa-caret-down"></I></A>
+<UL class=dropdown-menu>
+<LI><A href="guia-fase2.html">Análisis del mercado</A> 
+<LI><A href="guia-fase3.html">Comportamiento del consumidor</A> 
+<LI><A href="guia-fase4.html">Variables de decisión</A> </LI></UL>
+<LI><A href="guia-fase5.html">Dinámica de juego</A> 
+<LI><A class=active href="decisiones.html">Decisiones y resultados</A> 
+<LI><A href="contact.html">Soporte</A> </LI></UL><BUTTON id=theme-toggle title="Toggle theme"><I class="fa-solid fa-moon"></I><I class="fa-solid fa-sun"></I></BUTTON> </NAV></DIV></HEADER><!-- Main content --><MAIN><!-- Decisions section --><SECTION class=card-section>
+<DIV class=container>
+<DIV class=section-header data-aos="fade-up">
+<DIV class=section-icon><I class="fa-solid fa-cogs"></I></DIV>
+<H2 class=section-title>Enviar Decisiones</H2>
+<P class=section-subtitle>Selecciona el período activo para introducir o modificar las decisiones de marketing de tu equipo. Cada decisión impactará directamente en los resultados de tu empresa. </P></DIV>
+<DIV class=card-grid>
+<DIV class=action-card data-aos="fade-up" data-aos-delay="100">
+<DIV class=card-image><IMG alt="Equipo planificando estrategias del período inicial" src="https://images.pexels.com/photos/3184454/pexels-photo-3184454.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1260&amp;h=750&amp;dpr=2"> 
+<DIV class=card-overlay><I class="fa-solid fa-play overlay-icon"></I></DIV></DIV>
+<DIV class=card-content>
+<H3>Decisiones - Período 0</H3>
+<P class=card-description>Establece las bases estratégicas de tu empresa. Define el posicionamiento, y el resto de estrategias. </P>
+<DIV class=card-bottom>
+<DIV class=card-meta>
+<DIV class=card-date><I class="fa-solid fa-calendar-check"></I><SPAN>Disponible desde: 15 Enero 2025</SPAN> </DIV>
+<DIV class="card-status-indicator ready"><I class="fa-solid fa-circle-check"></I><SPAN>Listo</SPAN> </DIV></DIV>
+<DIV class=card-footer><A class="card-action-btn " href="fillout_p0.html"><I class="fa-solid fa-edit"></I>Completar Decisiones</A></DIV></DIV></DIV></DIV>
+<DIV class=action-card data-aos="fade-up" data-aos-delay="200">
+<DIV class=card-image><IMG alt="Reunión estratégica avanzada para el primer período" src="https://images.pexels.com/photos/1181345/pexels-photo-1181345.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1260&amp;h=750&amp;dpr=2"> 
+<DIV class=card-overlay><I class="fa-solid fa-chart-line overlay-icon"></I></DIV></DIV>
+<DIV class=card-content>
+<H3>Decisiones - Período I</H3>
+<P class=card-description>Ajusta tu estrategia basándote en los resultados obtenidos. Optimiza precios, distribución y campañas publicitarias. </P>
+<DIV class=card-bottom>
+<DIV class=card-meta>
+<DIV class=card-date><I class="fa-solid fa-calendar-check"></I><SPAN>Disponible desde: 22 Enero 2025</SPAN> </DIV>
+<DIV class="card-status-indicator ready"><I class="fa-solid fa-circle-check"></I><SPAN>Listo</SPAN> </DIV></DIV>
+<DIV class=card-footer><A class="card-action-btn " href="fillout_p1.html"><I class="fa-solid fa-edit"></I>Completar Decisiones</A></DIV></DIV></DIV></DIV>
+<DIV class="action-card disabled" data-aos="fade-up" data-aos-delay="300">
+<DIV class=card-image><IMG alt="Finalizando decisiones empresariales del segundo período" src="https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1260&amp;h=750&amp;dpr=2"> 
+<DIV class=card-overlay><I class="fa-solid fa-cogs overlay-icon"></I></DIV></DIV>
+<DIV class=card-content>
+<H3>Decisiones - Período II</H3>
+<P class=card-description>Implementa las estrategias finales de tu plan de marketing. Consolida tu posición en el mercado y maximiza la rentabilidad. </P>
+<DIV class=card-bottom>
+<DIV class=card-meta>
+<DIV class=card-date><I class="fa-solid fa-calendar-clock"></I><SPAN>Disponible desde: 29 Enero 2025</SPAN> </DIV>
+<DIV class="card-status-indicator coming-soon"><I class="fa-solid fa-clock"></I><SPAN>Próximamente</SPAN> </DIV></DIV>
+<DIV class=card-footer><BUTTON class="card-action-btn disabled"><I class="fa-solid fa-lock"></I>No Disponible</BUTTON> </DIV></DIV></DIV></DIV></DIV></DIV></SECTION><!-- Results section --><SECTION class=card-section>
+<DIV class=container>
+<DIV class=section-header data-aos="fade-up">
+<DIV class=section-icon><I class="fa-solid fa-chart-bar"></I></DIV>
+<H2 class=section-title>Consultar Resultados</H2>
+<P class=section-subtitle>Accede a los informes detallados y análisis de rendimiento para cada período de simulación. Evalúa el impacto de tus decisiones y planifica futuras estrategias. </P></DIV>
+<DIV class=card-grid>
+<DIV class=action-card data-aos="fade-up" data-aos-delay="100">
+<DIV class=card-image><IMG alt="Gráficos de resultados empresariales" src="https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1260&amp;h=750&amp;dpr=2"> 
+<DIV class=card-overlay><I class="fa-solid fa-chart-bar overlay-icon"></I></DIV></DIV>
+<DIV class=card-content>
+<H3>Resultados - Período 0</H3>
+<P class=card-description>Analiza el rendimiento inicial de tu estrategia. Revisa métricas como la cuota de mercado, o la percepción de marca. </P>
+<DIV class=card-bottom>
+<DIV class=card-meta>
+<DIV class=card-date><I class="fa-solid fa-calendar-check"></I><SPAN>Disponible desde: 20 Enero 2025</SPAN> </DIV>
+<DIV class="card-status-indicator ready"><I class="fa-solid fa-circle-check"></I><SPAN>Disponible</SPAN> </DIV></DIV>
+<DIV class=card-footer><A class="card-action-btn " href="marketo_per0.html"><I class="fa-solid fa-chart-bar"></I>Ver Informe</A></DIV></DIV></DIV></DIV>
+<DIV class="action-card disabled" data-aos="fade-up" data-aos-delay="200">
+<DIV class=card-image><IMG alt="Análisis de datos en pantalla" src="https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1260&amp;h=750&amp;dpr=2"> 
+<DIV class=card-overlay><I class="fa-solid fa-chart-line overlay-icon"></I></DIV></DIV>
+<DIV class=card-content>
+<H3>Resultados - Período I</H3>
+<P class=card-description>Evaluación del primer período. Compara tu rendimiento con la competencia y identifica oportunidades de mejora. </P>
+<DIV class=card-bottom>
+<DIV class=card-meta>
+<DIV class=card-date><I class="fa-solid fa-calendar-clock"></I><SPAN>Disponible desde: 27 Enero 2025</SPAN> </DIV>
+<DIV class="card-status-indicator coming-soon"><I class="fa-solid fa-clock"></I><SPAN>Próximamente</SPAN> </DIV></DIV>
+<DIV class=card-footer><BUTTON class="card-action-btn disabled"><I class="fa-solid fa-lock"></I>No Disponible</BUTTON> </DIV></DIV></DIV></DIV>
+<DIV class="action-card disabled" data-aos="fade-up" data-aos-delay="300">
+<DIV class=card-image><IMG alt="Informe final y gráficos de rendimiento" src="https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1260&amp;h=750&amp;dpr=2"> 
+<DIV class=card-overlay><I class="fa-solid fa-chart-bar overlay-icon"></I></DIV></DIV>
+<DIV class=card-content>
+<H3>Resultados - Período II</H3>
+<P class=card-description>Informe final de la simulación. Análisis completo del rendimiento obtenido y situación en el mercado. </P>
+<DIV class=card-bottom>
+<DIV class=card-meta>
+<DIV class=card-date><I class="fa-solid fa-calendar-clock"></I><SPAN>Disponible desde: 3 Febrero 2025</SPAN> </DIV>
+<DIV class="card-status-indicator coming-soon"><I class="fa-solid fa-clock"></I><SPAN>Próximamente</SPAN> </DIV></DIV>
+<DIV class=card-footer><BUTTON class="card-action-btn disabled"><I class="fa-solid fa-lock"></I>No Disponible</BUTTON> </DIV></DIV></DIV></DIV></DIV></DIV></SECTION></MAIN><!-- Footer --><FOOTER class=footer>
+<DIV class=container>
+<P>© 2025 - Versión 1.2 // Desarrollado con fines formativos.</P></DIV></FOOTER><!-- AOS Animation Library -->
+<SCRIPT src="https://unpkg.com/aos@2.3.1/dist/aos.js"></SCRIPT>
+
+<SCRIPT>
+        // === NAVIGATION AND THEME FUNCTIONALITY ===
+        const themeToggle = document.getElementById("theme-toggle");
+        const body = document.body;
+        const navbar = document.querySelector(".navbar");
+        const hamburger = document.querySelector(".hamburger-menu");
+        const navMenu = document.querySelector(".nav-menu");
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "light") {
+            body.classList.add("light-mode");
+        }        // Theme toggle functionality
+        themeToggle.addEventListener("click", () => {
+            body.classList.toggle("light-mode");
+            localStorage.setItem(
+                "theme",
+                body.classList.contains("light-mode") ? "light" : "dark"
+            );
+        });
+
+        // Mobile menu functionality
+        hamburger.addEventListener("click", () => {
+            navMenu.classList.toggle("active");
+        });
+
+        // Dropdown functionality for mobile
+        document.querySelectorAll(".dropdown > a").forEach((dropdownLink) => {
+            dropdownLink.addEventListener("click", (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    const dropdown = dropdownLink.parentElement;
+                    dropdown.classList.toggle("open");
+                }
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener("click", (e) => {
+            if (
+                navMenu.classList.contains("active") &&
+                !navMenu.contains(e.target) &&
+                !hamburger.contains(e.target)
+            ) {
+                navMenu.classList.remove("active");
+                document
+                    .querySelectorAll(".dropdown.open")
+                    .forEach((d) => d.classList.remove("open"));
+            }
+        });
+
+        // Close mobile menu when clicking nav links
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+                }
+            });
+        });
+
+        // === PASSWORD AUTHENTICATION ===
+        document.addEventListener('DOMContentLoaded', () => {
+            const passwordOverlay = document.getElementById('password-overlay');
+            const passwordForm = document.getElementById('password-form');
+            const usernameInput = document.getElementById('username-input');
+            const passwordInput = document.getElementById('password-input');
+            const passwordModal = document.getElementById('password-modal');
+            const errorMessage = document.getElementById('error-message');
+            
+            const CORRECT_USERNAME = 'marketo';
+            const CORRECT_PASSWORD = 'marketo';            function grantAccess() {
+                passwordOverlay.classList.add('hidden');
+                document.body.classList.add('authenticated');
+                
+                // Initialize AOS animations after authentication
+                setTimeout(() => {
+                    AOS.init({
+                        duration: 600,
+                        once: true,
+                        offset: 50,
+                        easing: 'ease-out'
+                    });
+                }, 100);
+            }
+
+            function denyAccess() {
+                errorMessage.style.display = 'block';
+                passwordModal.classList.add('shake');
+                usernameInput.value = '';
+                passwordInput.value = '';
+                usernameInput.focus();
+                
+                setTimeout(() => {
+                    passwordModal.classList.remove('shake');
+                }, 500);
+            }
+            
+            // Check authentication status
+            if (sessionStorage.getItem('isAuthenticated') === 'true') {
+                grantAccess();
+            } else {
+                passwordOverlay.style.display = 'flex';
+                setTimeout(() => {
+                    usernameInput.focus();
+                }, 100);
+            }
+
+            // Handle form submission
+            passwordForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (usernameInput.value === CORRECT_USERNAME && passwordInput.value === CORRECT_PASSWORD) {
+                    sessionStorage.setItem('isAuthenticated', 'true');
+                    grantAccess();
+                } else {
+                    denyAccess();
+                }
+            });
+
+            // Enhanced input interactions
+            [usernameInput, passwordInput].forEach(input => {
+                input.addEventListener('focus', () => {
+                    errorMessage.style.display = 'none';
+                });
+                
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        passwordForm.dispatchEvent(new Event('submit'));
+                    }
+                });
+            });
+        });
+
+        // === ENHANCED USER INTERACTIONS ===
+        
+        // Card hover effects with improved performance
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.action-card:not(.disabled)');
+            
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.willChange = 'transform, box-shadow';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.willChange = 'auto';
+                });
+            });
+        });        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Initialize animations when page loads and user is authenticated
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('isAuthenticated') === 'true') {
+                setTimeout(() => {
+                    AOS.init({
+                        duration: 600,
+                        once: true,
+                        offset: 50,
+                        easing: 'ease-out'
+                    });
+                }, 300);
+            }
+        });
+
+        // Enhanced accessibility
+        document.addEventListener('keydown', (e) => {
+            // Close mobile menu with Escape key
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+            }
+        });
+
+        // Page loading optimization
+        window.addEventListener('load', () => {
+            // Remove any loading states
+            document.body.classList.add('loaded');
+            
+            // Preload critical images for better UX
+            const imageUrls = [
+                'https://images.pexels.com/photos/3184454/pexels-photo-3184454.jpeg',
+                'https://images.pexels.com/photos/1181345/pexels-photo-1181345.jpeg',
+                'https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg'
+            ];
+            
+            imageUrls.forEach(url => {
+                const img = new Image();
+                img.src = url;
+            });
+        });
+    </SCRIPT>
+</BODY></HTML>

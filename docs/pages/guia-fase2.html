@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis del Mercado | Marketo</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* --- 1. CSS Variables and Global Styles --- */
+        html, body { scrollbar-width: none; -ms-overflow-style: none; overflow: -moz-scrollbars-none; }
+        html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+        :root {
+            --bg-color: #121212; --primary-surface-color: #1E1E1E; --accent-color: #F57C00;
+            --accent-hover-color: #FB8C00; --text-color: #c7c7c7; --heading-color: #ffffff;
+            --border-color: #333333; --navbar-height: 70px;
+        }
+        body.light-mode {
+            --bg-color: #f8f9fa; --primary-surface-color: #ffffff; --text-color: #333;
+            --heading-color: #2c3e50; --border-color: #e0e0e0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Lato', sans-serif; font-size: 16px; line-height: 1.6; color: var(--text-color); background-color: var(--bg-color); transition: background-color 0.3s ease, color 0.3s ease; }
+        h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--heading-color); line-height: 1.2; }
+        a { text-decoration: none; color: var(--accent-color); transition: color 0.3s ease; }
+        a:hover { color: var(--accent-hover-color); }
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 80px 0; }
+        /* --- 2. Navigation Bar --- */
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; height: var(--navbar-height); background-color: var(--primary-surface-color); z-index: 1000; transition: box-shadow 0.3s ease, background-color 0.3s ease; border-bottom: 1px solid var(--border-color); }
+        .navbar-scrolled { background-color: rgba(30, 30, 30, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3); }
+        body.light-mode .navbar-scrolled { background-color: rgba(255, 255, 255, 0.85); }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; height: 100%; }
+        .navbar-logo { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--heading-color); }
+        .navbar-logo i { color: var(--accent-color); margin-right: 8px; }
+        .nav-menu { display: flex; align-items: center; gap: 30px; }
+        .nav-links { display: flex; list-style: none; gap: 40px; }
+        .nav-links a { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; color: var(--text-color); position: relative; padding-bottom: 5px; }
+        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 2px; background-color: var(--accent-color); transition: width 0.3s ease; }
+        .nav-links > li > a:hover { color: var(--heading-color); }
+        .nav-links > li > a:hover::after { width: 100%; }
+        .nav-links a.active { color: var(--accent-color); }
+        .nav-links > li > a.active::after { width: 100%; }
+        .dropdown { position: relative; }
+        .dropdown-menu { display: none; position: absolute; top: 110%; left: 50%; transform: translateX(-50%); background-color: var(--primary-surface-color); list-style: none; padding: 10px 0; margin: 0; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); min-width: 220px; z-index: 1001; border: 1px solid var(--border-color); }
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu li a { display: block; padding: 12px 20px; color: var(--text-color); font-size: 0.95rem; transition: background-color 0.2s ease, color 0.2s ease; }
+        .dropdown-menu li a:hover { color: var(--heading-color); background-color: var(--border-color); }
+        .dropdown-menu li a::after { content: none; }
+        .dropdown-menu li a.active { color: var(--accent-color); font-weight: 700; }
+        .dropdown > a i { margin-left: 8px; font-size: 0.8em; transition: transform 0.3s ease; }
+        .dropdown:hover > a i { transform: rotate(180deg); }
+        .dropdown > a.noclick { cursor: default; }
+        .dropdown > a.noclick:hover::after { width: 0; }
+        #theme-toggle { background: none; border: none; color: var(--accent-color); font-size: 1.4rem; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; }
+        #theme-toggle .fa-sun { display: none; }
+        body.light-mode #theme-toggle .fa-sun { display: block; }
+        body.light-mode #theme-toggle .fa-moon { display: none; }
+        .hamburger-menu { display: none; }
+        /* --- 3. Page Content Styles --- */
+        main { padding-top: var(--navbar-height); }
+        .footer { background-color: var(--primary-surface-color); color: var(--text-color); text-align: center; padding: 40px 0; border-top: 1px solid var(--border-color); }
+        
+        /* --- MODIFIED: Page Header with Background Image --- */
+        .page-header {
+            text-align: center;
+            padding: 100px 0; /* Increased padding for more impact */
+            border-bottom: 1px solid var(--border-color);
+            position: relative; /* Needed for the overlay */
+            background-image: url(../images/advertising.jpg);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Creates a cool parallax effect */
+            overflow: hidden; /* Ensures pseudo-elements don't overflow */
+        }
+        /* --- NEW: Header Overlay for Readability --- */
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(18, 18, 18, 0.7); /* Dark overlay for dark mode */
+            z-index: 1; /* Sits between background and text */
+            transition: background-color 0.3s ease;
+        }
+        body.light-mode .page-header::before {
+            background-color: rgba(248, 249, 250, 0.8); /* Light overlay for light mode */
+        }
+        /* --- NEW: Ensure Header Text is Above Overlay --- */
+        .page-header h1, .page-header p {
+            position: relative;
+            z-index: 2; /* Sits on top of the overlay */
+        }
+
+        .page-header h1 { font-size: 3rem; margin-bottom: 10px; }
+        .page-header p { font-size: 1.2rem; max-width: 700px; margin: 0 auto; color: var(--text-color); }
+        
+        /* NEW: Main content layout for side nav */
+        .content-wrapper {
+            display: flex;
+            gap: 30px;
+            max-width: 1100px; /* Adjust this to control overall width */
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .main-article {
+            flex: 1; /* Takes up remaining space */
+            min-width: 0; /* Prevents flexbox overflow issues */
+        }
+        .content-section { padding-top: 60px; padding-bottom: 0; }
+        .content-section .container { max-width: 800px; padding: 0; margin: 0;} /* Reset container for flex layout */
+        .content-section p { margin-bottom: 1.5em; font-size: 1.1rem; line-height: 1.7; }
+        .content-section h3 { font-size: 1.8rem; margin-top: 2em; margin-bottom: 1em; border-left: 4px solid var(--accent-color); padding-left: 15px; }
+        .content-section h3:first-of-type { margin-top: 0; }
+        .content-image { height: auto; border-radius: 8px; margin: 30px 0; border: 1px solid var(--border-color); display: block;}
+        .callout { margin: 40px 0; padding: 30px; background-color: var(--primary-surface-color); border-left: 5px solid var(--accent-color); border-radius: 0 8px 8px 0; clear: both;}
+        .callout p { font-family: 'Poppins', sans-serif; font-style: italic; font-size: 1.2rem; color: var(--heading-color); margin: 0; }
+        .callout p::before { content: '\f10d'; font-family: "Font Awesome 6 Free"; font-weight: 900; color: var(--accent-color); font-size: 1.5rem; margin-right: 15px; font-style: normal; }
+        .image-float-right { float: right; width: 40%; max-width: 300px; margin: 10px 0 15px 25px; }
+        .image-float-left { float: left; width: 40%; max-width: 300px; margin: 10px 25px 15px 0; }
+        /* --- 4. Table Styles --- */
+        .table-container { margin: 60px 0; }
+        .content-section table { width: 100%; border-collapse: collapse; font-size: 1rem; overflow: hidden; border-radius: 8px; }
+        .content-section th, .content-section td { padding: 15px 20px; text-align: left; border: none; }
+        .content-section th:not(:first-child), .content-section td:not(:first-child) { text-align: right; }
+        .content-section thead th { background-color: #2c3e50; color: #ffffff; font-weight: 600; font-family: 'Poppins', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        .content-section tbody tr:nth-child(even) { background-color: var(--primary-surface-color); }
+        .content-section tbody tr:nth-child(odd) { background-color: var(--bg-color); }
+        body.light-mode .content-section tbody tr:nth-child(even) { background-color: #f7f7f7; }
+        body.light-mode .content-section tbody tr:nth-child(odd) { background-color: var(--primary-surface-color); }
+        .content-section caption { caption-side: top; text-align: left; padding-bottom: 15px; font-family: 'Poppins', sans-serif; font-size: 1.3rem; font-weight: 600; color: var(--heading-color); }
+        .table-footnote { margin-top: 15px; font-size: 0.9rem; font-style: italic; color: var(--text-color); opacity: 0.85; text-align: left; }
+        /* --- 5. NEW: Side Navigation --- */
+        .side-nav {
+            flex: 0 0 220px; /* Does not grow or shrink, base width 220px */
+            align-self: flex-start; /* Aligns to the top of the flex container */
+            position: sticky;
+            top: calc(var(--navbar-height) + 40px); /* Sticks below the navbar */
+            padding-top: 60px; /* Matches content-section padding */
+            height: calc(100vh - var(--navbar-height));
+            overflow-y: auto;
+        }
+        .side-nav-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--heading-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .side-nav ul {
+            list-style: none;
+        }
+        .side-nav li a {
+            display: block;
+            padding: 8px 15px;
+            margin-bottom: 5px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease-in-out;
+        }
+        .side-nav li a:hover {
+            background-color: var(--primary-surface-color);
+            color: var(--heading-color);
+        }
+        .side-nav li a.active {
+            color: var(--accent-color);
+            font-weight: 700;
+            background-color: var(--primary-surface-color);
+            border-left-color: var(--accent-color);
+        }
+        /* --- 6. Mobile Responsiveness --- */
+        @media (max-width: 992px) { /* Widened breakpoint for side-nav */
+             .side-nav { display: none; }
+             .content-wrapper { display: block; } /* Revert to standard block layout */
+             .content-section .container { max-width: 800px; margin: 0 auto; padding: 0 20px;} /* Restore container */
+        }
+        @media (max-width: 768px) {
+            section { padding: 60px 0; }
+            .page-header { padding: 80px 0; background-attachment: scroll; } /* Disable fixed attachment on mobile for performance */
+            .page-header h1 { font-size: 2.2rem; }
+            .content-section { padding-top: 40px; }
+            .content-section .image-float-right, .content-section .image-float-left { float: none; width: 100%; max-width: 100%; margin: 20px auto; }
+            .callout { margin: 30px 0; padding: 20px; }
+            .callout p { font-size: 1.1rem; }
+            .table-container { overflow-x: auto; } /* Makes table scrollable on mobile */
+            /* --- Navbar Fixes --- */
+            .navbar .container { justify-content: space-between; }
+            .hamburger-menu { display: block; font-size: 1.5rem; color: var(--heading-color); background: transparent; border: none; cursor: pointer; z-index: 1002; }
+            .nav-menu {
+                position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
+                background-color: var(--primary-surface-color);
+                flex-direction: column; justify-content: center; align-items: center;
+                gap: 40px; transition: right 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+                box-shadow: -5px 0 15px rgba(0,0,0,0.2); padding: 20px;
+            }
+            .nav-menu.active { right: 0; }
+            .nav-links { flex-direction: column; gap: 25px; width: 100%; text-align: center; margin-top: 40px; }
+            .dropdown:hover .dropdown-menu { display: none; }
+            /* --- Mobile Dropdown/Accordion Styles --- */
+            .dropdown > a { display: flex; justify-content: center; align-items: center; gap: 8px; }
+            .dropdown > a i { display: inline-block; transition: transform 0.3s ease; }
+            .dropdown.open > a i { transform: rotate(180deg); }
+            .dropdown .dropdown-menu {
+                display: none; position: static; transform: none; box-shadow: none; border: none;
+                background-color: rgba(0,0,0,0.15); min-width: unset;
+                padding: 10px 0; margin-top: 15px; border-radius: 8px;
+            }
+            body.light-mode .dropdown .dropdown-menu { background-color: rgba(0,0,0,0.05); }
+            .dropdown.open .dropdown-menu { display: block; }
+            .dropdown-menu li a { padding: 10px 20px; font-size: 0.9rem; }
+            #theme-toggle { position: absolute; bottom: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+      <div class="container">
+        <a class="navbar-logo" href="../index.html"
+          ><i class="fa-solid fa-chart-simple"></i>Mar<span style="color: var(--accent-color)">k</span>eto!</a
+        ><button aria-label="Toggle menu" class="hamburger-menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <nav class="nav-menu">
+          <ul class="nav-links">
+            <li><a class="active" href="../index.html">Inicio</a></li>
+            <li class="dropdown">
+              <a class="noclick" href="#"
+                >Guía <i class="fa-solid fa-caret-down"></i
+              ></a>
+              <ul class="dropdown-menu">
+                <li><a href="guia-fase2.html">Análisis del mercado</a></li>
+                <li>
+                  <a href="guia-fase3.html">Comportamiento del consumidor</a>
+                </li>
+                <li><a href="guia-fase4.html">Variables de decisión</a></li>
+              </ul>
+            </li>
+            <li><a href="guia-fase5.html">Dinámica de juego</a></li>
+            <li><a href="decisiones.html">Decisiones y resultados</a></li>
+            <li><a href="contact.html">Soporte</a></li>
+          </ul>
+          <button id="theme-toggle" title="Toggle theme">
+            <i class="fa-solid fa-moon"></i><i class="fa-solid fa-sun"></i>
+          </button>
+        </nav>
+      </div>
+    </header>
+    <main>
+        <section class="page-header">
+            <h1>Análisis del Mercado</h1>
+            <p>Características, estructura y evolución.</p>
+        </section>
+        <!-- NEW: Content Wrapper for Flexbox Layout -->
+        <div class="content-wrapper">
+            <!-- NEW: Side Navigation Menu -->
+            <nav class="side-nav">
+                <p class="side-nav-title">En esta página</p>
+                <ul>
+                    <li><a href="#vision-general">Visión general</a></li>
+                    <li><a href="#mercado-europeo">El mercado europeo</a></li>
+                    <li><a href="#mercado-espanol">El mercado español</a></li>
+                </ul>
+            </nav>
+            <!-- NEW: Main Article Content Wrapper -->
+            <div class="main-article">
+                <section class="content-section">
+                    <div class="container">
+                        <!-- ADDED ID -->
+                        <h3 id="vision-general">Visión general</h3>
+                        <p>El mercado de los productos de cuidado solar se compone de protectores solares, productos “after-sun”, y bronceadores. Cada uno de ellos puede presentarse en varios formatos, como lociones, geles, sprays, o cremas, y todos ellos, en mayor o menor medida, absorben o reflejan la radiación ultravioleta del sol.</p>
+                        <p>Durante los últimos años, el mercado global en valor ha experimentado un crecimiento del 3,6% debido, fundamentalmente, a una mayor conciencia social sobre los peligros de la exposición continuada al sol. Ese crecimiento se está produciendo, sobre todo, en el continente asiático, mientras que en Europa el crecimiento ha sido más moderado. El consumo global en volumen (unidades físicas) de este tipo de productos ha aumentado un 5,2% con respecto al año pasado, alcanzando un total de 830,8 millones de unidades en este año (2023).</p>
+                        <img src="../images/suncare-girl.jpeg" alt="Woman applying sun care product" class="content-image image-float-left">
+                        <p>Los protectores solares son, con diferencia, el producto más importante de esta categoría, y supone el 82,3% de todo el mercado de productos de cuidado solar. Los productos orientados al cuidado de la piel después de la exposición solar (“after-sun”) solamente suponen el 9,9% de las ventas en volumen globales. El volumen de ventas en unidades ha tenido crecimientos más modestos, y la distribución geográfica sitúa a Asia como la región con mayor cuota de ventas en valor (34%), seguido de Estados Unidos (28,5%), y Europa (24,5%). El resto de las regiones suponen, de forma conjunta, solamente un 13%.</p>
+                        <blockquote class="callout">
+                            <p>El simulador solamente se centra en la categoría de “protectores solares”, no en el resto de productos de cuidado solar.</p>
+                        </blockquote>
+                        <p>A nivel mundial, los canales de distribución que dominan la venta de este tipo de productos son los hipermercados y los supermercados (28.3%). Sin embargo, otras formas de distribución, como las tiendas especializadas en salud y belleza (farmacias, perfumerías, etc.), mantienen una cuota de mercado agregada del (25,5%) (ver Tabla 1). La competencia dentro de este mercado está conformada, fundamentalmente, por grupos multinacionales que mantienen posiciones sólidas en los principales mercados internacionales.</p>
+                        <div class="table-container">
+                            <table>
+                                <caption>Tabla 1. Participación en volumen por canales de distribución</caption>
+                                <thead>
+                                    <tr>
+                                        <th>Canal de distribución</th>
+                                        <th>Participación (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Hipermercados</td><td>10.0</td></tr>
+                                    <tr><td>Supermercados</td><td>18.3</td></tr>
+                                    <tr><td>Tiendas de salud y belleza</td><td>16.2</td></tr>
+                                    <tr><td>Farmacias</td><td>9.3</td></tr>
+                                    <tr><td>Otros (venta directa, ...)</td><td>46.2</td></tr>
+                                    <tr><td>Total</td><td>100.0</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="table-footnote">Fuente: Euromonitor 2023.</p>
+                        </div>
+                        <p>La base de estas compañías se fundamenta en la consecución de economías de escala, la distribución internacional de sus productos, inversiones importantes en investigación y desarrollo, y en la construcción de un posicionamiento de marca sólido y consistente. Los proveedores son, en su mayoría, fabricantes de productos químicos sujetos a normativas y estándares de calidad muy estrictos.</p>
+                        <p>La posibilidad de que aparezcan productos sustitutivos es baja, especialmente por el aumento de la conciencia social hacia los perjuicios que tiene para la salud la exposición prolongada a los rayos solares. No obstante, el crecimiento sostenido del mercado sí alienta la posibilidad de que entren más competidores. Hay que tener en cuenta, sin embargo, que los altos costes de entrada en este mercado y las inversiones necesarias en innovación hacen que esto solamente sea posible para compañías altamente desarrolladas.</p>
+                        <blockquote class="callout">
+                            <p>L’oreal, con un 12,8% de cuota de mercado global, seguida de Johnson & Johnson, Procter & Gamble, y la japonesa Shiseido, son las compañías líderes en este mercado.</p>
+                        </blockquote>
+                        <p>Para competir con más garantías, y potenciar el crecimiento del mercado, los fabricantes han desarrollado productos con todo tipo de beneficios adicionales, como la facilidad de aplicación (sprays, dosificadores, etc.), ingredientes que repelen a los insectos, hidratación, vitaminas para la piel, agentes hipoalergénicos, etc.</p>
+                        <!-- ADDED ID -->
+                        <h3 id="mercado-europeo">El mercado europeo</h3>
+                        <img src="../images/euro.jpg" alt="Map of Europe" class="content-image image-float-right">
+                        <p>En el mercado europeo la situación es similar, y se esperan crecimientos del 8,1% de media. En el 2023 las ventas se situaron en los 185,6 millones de unidades, que supusieron un aumento leve del 2,7% con respecto al año anterior. Hay que tener en cuenta el descenso generalizado de ventas que causó la pandemia de Covid19 en 2020, y su progresiva recuperación en los años siguientes, con niveles de demanda todavía ligeramente inferiores a los que se registraban antes de la crisis sanitaria, pero que se espera aumenten en 2024.</p>
+                        <p>Dentro del mercado europeo, los países que más consumen este tipo de productos son, por este orden, Francia, Italia, Reino Unido, Alemania y España, con diferencias significativas entre el primero y el último (ver Tabla 2). Desde el punto de vista competitivo, los factores dominantes son los mismos que se definen a nivel global, con diferencias insignificantes en términos prácticos. De este modo, tanto la capacidad de negociación con los distribuidores como la estructura de proveedores, las barreras de entrada al mercado, o la intensidad competitiva, son prácticamente idénticas a las que caracterizan el mercado a nivel mundial.</p>
+                        <div class="table-container">
+                            <table>
+                                <caption>Tabla 2. Ventas en valor y participación en Europa</caption>
+                                <thead>
+                                    <tr>
+                                        <th>País</th>
+                                        <th>Ventas (millones de €)</th>
+                                        <th>Participación (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Francia</td><td>463.3</td><td>15.8</td></tr>
+                                    <tr><td>Italia</td><td>457.0</td><td>15.6</td></tr>
+                                    <tr><td>Reino Unido</td><td>433.1</td><td>14.8</td></tr>
+                                    <tr><td>Alemania</td><td>292.0</td><td>10.0</td></tr>
+                                    <tr><td>España</td><td>280.0</td><td>9.6</td></tr>
+                                    <tr><td>Resto de Europa</td><td>1001.6</td><td>34.2</td></tr>
+                                    <tr><td>Total</td><td>2927.6</td><td>100.0</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="table-footnote">Fuente: Marketline 2023.</p>
+                        </div>
+                        <p>Por último, en Europa, los canales de distribución no presentan diferencias significativas con respecto a los datos globales, exceptuando el aumento en importancia de canales especializados como las farmacias. Solamente este canal supone el 14,5% de las ventas totales, restando importancia, fundamentalmente, a la venta directa por parte de los fabricantes.</p>
+                        <!-- ADDED ID -->
+                        <h3 id="mercado-espanol">El mercado español</h3>
+                        <p>El mercado español crece más que el resto de mercados, y la recuperación post-pandemia ha sido algo más rápida. En 2023, este mercado generó un total de 259 millones de euros y 17,8 millones de unidades vendidas, lo que supuso un crecimiento del 4,4% con respecto al año anterior. En cuanto a los canales de distribución, el mercado español se comporta de un modo distinto al resto de mercados. De este modo, los hipermercados y supermercados generan el 37,4% de las ventas de la categoría, y las tiendas especializadas, incluyendo a las farmacias, un 27% aproximadamente. Por tanto, la venta directa apenas es significativa, y la venta online por parte de terceros aún supone una cuota sensiblemente inferior (16.8%). Conviene aclarar que las ventas en el canal online de hipermercados, farmacias, etc. ya están contabilizadas en el cómputo de la cuota de cada canal. La venta online a la que se refiere ese 16.8% solamente contempla las ventas de plataformas como Amazon, Perfumes Club, etc.</p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 - Versión 1.2 // Desarrollado con fines formativos.</p>
+        </div>
+    </footer>
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const navbar = document.querySelector('.navbar');
+        const hamburger = document.querySelector('.hamburger-menu');
+        const navMenu = document.querySelector('.nav-menu');
+        // --- Theme Management ---
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+        }
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+        });
+        // --- Navbar Scroll Effect ---
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+        });
+        // --- Hamburger Menu Toggle ---
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+        // --- Mobile Accordion Dropdown Logic ---
+        document.querySelectorAll('.dropdown > a').forEach(dropdownLink => {
+            dropdownLink.addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    const dropdown = dropdownLink.parentElement;
+                    dropdown.classList.toggle('open');
+                }
+            });
+        });
+        // --- Click outside to close mobile menu ---
+        document.addEventListener('click', (e) => {
+            if (navMenu.classList.contains('active') && !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                navMenu.classList.remove('active');
+                document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+            }
+        });
+        // --- Close menu when a link is clicked ---
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            if (!link.parentElement.classList.contains('dropdown')) {
+                link.addEventListener('click', () => {
+                    if (navMenu.classList.contains('active')) {
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+        // --- NEW: Side Nav Scrollspy Logic ---
+        const sections = document.querySelectorAll('.main-article h3[id]');
+        const sideNavLinks = document.querySelectorAll('.side-nav li a');
+        const activateSideNav = () => {
+            let current = '';
+            const navHeight = navbar.offsetHeight;
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - navHeight - 40; // Add extra offset
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            sideNavLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', activateSideNav);
+        document.addEventListener('DOMContentLoaded', activateSideNav); // Activate on page load
+    </script>
+</body>
+</html>
