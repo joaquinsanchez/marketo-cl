@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html><HTML lang=es><HEAD><TITLE>Decisiones y Resultados | Marketo</TITLE>
 <META charset=UTF-8>
 <META name=viewport content="width=device-width, initial-scale=1.0">
-<META name=description content="Centro de decisiones y resultados de la simulación empresarial Marketo. Gestiona las estrategias de marketing de tu equipo."><!-- Preconnect for performance --><LINK rel=preconnect href="https://fonts.googleapis.com"><LINK rel=preconnect href="https://fonts.gstatic.com" crossorigin><!-- Enhanced font selection --><LINK rel=stylesheet href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Poppins:wght@400;500;600;700&amp;display=swap"><!-- Font Awesome --><LINK rel=stylesheet href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" referrerpolicy="no-referrer"><!-- AOS Animation Library --><LINK rel=stylesheet href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+<META name=description content="Centro de decisiones y resultados de la simulación empresarial Marketo. Gestiona las estrategias de marketing de tu equipo."><!-- Preconnect for performance --><LINK rel=preconnect href="https://fonts.googleapis.com"><LINK rel=preconnect href="https://fonts.gstatic.com" crossorigin><!-- Enhanced font selection --><LINK rel=stylesheet href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Poppins:wght@400;500;600;700&amp;display=swap"><!-- Font Awesome --><LINK rel=stylesheet href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="><!-- AOS Animation Library --><LINK rel=stylesheet href="https://unpkg.com/aos@2.3.1/dist/aos.css">
 <STYLE>        /* === CSS VARIABLES AND RESET === */        :root {
             /* Simplified color palette with accent color focus */
             --bg-color: #121212;
@@ -602,7 +602,7 @@
 <DIV id=password-modal>
 <H2><I class="fa-solid fa-shield-halved"></I>Acceso Seguro</H2>
 <P>Introduce tus credenciales para acceder al centro de decisiones</P>
-<FORM id=password-form><INPUT id=username-input placeholder="Usuario" autocomplete="username" required> <INPUT id=password-input type=password value="" placeholder="Contraseña" autocomplete="current-password" required> 
+<FORM id=password-form><INPUT id=username-input required autocomplete="username" placeholder="Usuario"> <INPUT id=password-input type=password value="" required autocomplete="current-password" placeholder="Contraseña"> 
 <P id=error-message class=error-message>Usuario o contraseña incorrectos.</P><BUTTON class="btn btn-primary" type=submit><I class="fa-solid fa-sign-in-alt"></I>Acceder</BUTTON> </FORM></DIV></DIV><!-- Navigation --><HEADER class=navbar>
 <DIV class=container><A class=navbar-logo href="../index.html"><I class="fa-solid fa-chart-simple"></I>Mar<SPAN style="COLOR: ">k</SPAN>eto!</A><BUTTON aria-label="Toggle menu" class=hamburger-menu><I class="fa-solid fa-bars"></I></BUTTON> <NAV class=nav-menu>
 <UL class=nav-links>
@@ -621,7 +621,7 @@
 <H2 class=section-title>Enviar Decisiones</H2>
 <P class=section-subtitle>Selecciona el período activo para introducir o modificar las decisiones de marketing de tu equipo. Cada decisión impactará directamente en los resultados de tu empresa. </P></DIV>
 <DIV class=card-grid>
-<DIV class="action-card disabled" data-aos="fade-up" data-aos-delay="100">
+<DIV class=action-card data-aos="fade-up" data-aos-delay="100">
 <DIV class=card-image><IMG alt="Equipo planificando estrategias del período inicial" src="https://images.pexels.com/photos/3184454/pexels-photo-3184454.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1260&amp;h=750&amp;dpr=2"> 
 <DIV class=card-overlay><I class="fa-solid fa-play overlay-icon"></I></DIV></DIV>
 <DIV class=card-content>
@@ -629,9 +629,9 @@
 <P class=card-description>Establece las bases estratégicas de tu empresa. Define el posicionamiento y el resto de estrategias. </P>
 <DIV class=card-bottom>
 <DIV class=card-meta>
-<DIV class=card-date><I class="fa-solid fa-calendar-clock"></I><SPAN>Disponible desde: 6 de Octubre 2025</SPAN> </DIV>
-<DIV class="card-status-indicator coming-soon"><I class="fa-solid fa-clock"></I><SPAN>Próximamente</SPAN> </DIV></DIV>
-<DIV class=card-footer><BUTTON class="card-action-btn disabled"><I class="fa-solid fa-lock"></I>No Disponible</BUTTON></DIV></DIV></DIV></DIV>
+<DIV class=card-date><I class="fa-solid fa-calendar-check"></I><SPAN>Disponible desde: 6 de Octubre 2025</SPAN> </DIV>
+<DIV class="card-status-indicator ready"><I class="fa-solid fa-circle-check"></I><SPAN>Listo</SPAN> </DIV></DIV>
+<DIV class=card-footer><A class="card-action-btn " href="fillout_p0.html"><I class="fa-solid fa-edit"></I>Completar Decisiones</A></DIV></DIV></DIV></DIV>
 <DIV class="action-card disabled" data-aos="fade-up" data-aos-delay="200">
 <DIV class=card-image><IMG alt="Reunión estratégica avanzada para el primer período" src="https://images.pexels.com/photos/1181345/pexels-photo-1181345.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1260&amp;h=750&amp;dpr=2"> 
 <DIV class=card-overlay><I class="fa-solid fa-chart-line overlay-icon"></I></DIV></DIV>
@@ -651,7 +651,7 @@
 <P class=card-description>Implementa las estrategias finales de tu plan de marketing. Consolida tu posición en el mercado y maximiza la rentabilidad. </P>
 <DIV class=card-bottom>
 <DIV class=card-meta>
-<DIV class=card-date><I class="fa-solid fa-calendar-clock"></I><SPAN>Disponible desde: 13 Noviembre 2025</SPAN> </DIV>
+<DIV class=card-date><I class="fa-solid fa-calendar-clock"></I><SPAN>Disponible desde: 13 de Noviembre 2025</SPAN> </DIV>
 <DIV class="card-status-indicator coming-soon"><I class="fa-solid fa-clock"></I><SPAN>Próximamente</SPAN> </DIV></DIV>
 <DIV class=card-footer><BUTTON class="card-action-btn disabled"><I class="fa-solid fa-lock"></I>No Disponible</BUTTON> </DIV></DIV></DIV></DIV></DIV></DIV></SECTION><!-- Results section --><SECTION class=card-section>
 <DIV class=container>
@@ -668,7 +668,7 @@
 <P class=card-description>Analiza el rendimiento inicial de tu estrategia. Revisa métricas como la cuota de mercado o la percepción de marca. </P>
 <DIV class=card-bottom>
 <DIV class=card-meta>
-<DIV class=card-date><I class="fa-solid fa-calendar-clock"></I><SPAN>Disponible desde: 21 Octubre 2025</SPAN> </DIV>
+<DIV class=card-date><I class="fa-solid fa-calendar-clock"></I><SPAN>Disponible desde: 21 de Octubre 2025</SPAN> </DIV>
 <DIV class="card-status-indicator coming-soon"><I class="fa-solid fa-clock"></I><SPAN>Próximamente</SPAN> </DIV></DIV>
 <DIV class=card-footer><BUTTON class="card-action-btn disabled"><I class="fa-solid fa-lock"></I>No Disponible</BUTTON></DIV></DIV></DIV></DIV>
 <DIV class="action-card disabled" data-aos="fade-up" data-aos-delay="200">
@@ -679,7 +679,7 @@
 <P class=card-description>Evaluación del primer período. Compara tu rendimiento con la competencia e identifica oportunidades de mejora. </P>
 <DIV class=card-bottom>
 <DIV class=card-meta>
-<DIV class=card-date><I class="fa-solid fa-calendar-clock"></I><SPAN>Disponible desde: 12 Noviembre 2025</SPAN> </DIV>
+<DIV class=card-date><I class="fa-solid fa-calendar-clock"></I><SPAN>Disponible desde: 12 de Noviembre 2025</SPAN> </DIV>
 <DIV class="card-status-indicator coming-soon"><I class="fa-solid fa-clock"></I><SPAN>Próximamente</SPAN> </DIV></DIV>
 <DIV class=card-footer><BUTTON class="card-action-btn disabled"><I class="fa-solid fa-lock"></I>No Disponible</BUTTON> </DIV></DIV></DIV></DIV>
 <DIV class="action-card disabled" data-aos="fade-up" data-aos-delay="300">
@@ -690,7 +690,7 @@
 <P class=card-description>Informe final de la simulación. Análisis completo del rendimiento obtenido y situación en el mercado. </P>
 <DIV class=card-bottom>
 <DIV class=card-meta>
-<DIV class=card-date><I class="fa-solid fa-calendar-clock"></I><SPAN>Disponible desde: 25 Noviembre 2025</SPAN> </DIV>
+<DIV class=card-date><I class="fa-solid fa-calendar-clock"></I><SPAN>Disponible desde: 25 de Noviembre 2025</SPAN> </DIV>
 <DIV class="card-status-indicator coming-soon"><I class="fa-solid fa-clock"></I><SPAN>Próximamente</SPAN> </DIV></DIV>
 <DIV class=card-footer><BUTTON class="card-action-btn disabled"><I class="fa-solid fa-lock"></I>No Disponible</BUTTON> </DIV></DIV></DIV></DIV></DIV></DIV></SECTION></MAIN><!-- Footer --><FOOTER class=footer>
 <DIV class=container>
